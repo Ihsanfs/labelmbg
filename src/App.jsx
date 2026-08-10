@@ -28,7 +28,9 @@ const DEFAULT_DISPLAY_OPTIONS = {
 const EMPTY_FORM = {
   label: "NAMA SPPG",
   batch: "Batch 01",
+  useExpStart: true,
   expStartTime: "08:00",
+  useExpEnd: true,
   expEndTime: "12:00",
   price: "",
   notes: "",
@@ -64,12 +66,19 @@ function normalizeNutrition(form) {
   };
 }
 
-function formatExpTime(startTime, endTime) {
-  if (startTime && endTime) {
+function formatExpTime(useStart, startTime, useEnd, endTime) {
+  const hasStart = useStart !== false && Boolean(startTime);
+  const hasEnd = useEnd !== false && Boolean(endTime);
+
+  if (hasStart && hasEnd) {
     return `${startTime} - ${endTime} WIB`;
   }
-  if (startTime) return `${startTime} WIB`;
-  if (endTime) return `${endTime} WIB`;
+  if (hasStart) {
+    return `${startTime} WIB`;
+  }
+  if (hasEnd) {
+    return `${endTime} WIB`;
+  }
   return "";
 }
 
@@ -210,7 +219,7 @@ export default function App() {
       return;
     }
 
-    const expString = formatExpTime(form.expStartTime, form.expEndTime);
+    const expString = formatExpTime(form.useExpStart, form.expStartTime, form.useExpEnd, form.expEndTime);
 
     setLoading(true);
     try {
@@ -239,7 +248,9 @@ export default function App() {
         createdAt: Date.now(),
         label: (form.label || "").trim(),
         batch: (form.batch || "").trim(),
+        useExpStart: form.useExpStart !== false,
         expStartTime: form.expStartTime || "",
+        useExpEnd: form.useExpEnd !== false,
         expEndTime: form.expEndTime || "",
         exp: expString,
         price: (form.price || "").trim(),
@@ -283,7 +294,9 @@ export default function App() {
     setForm({
       label: record.label || "",
       batch: record.batch || "",
+      useExpStart: record.useExpStart !== undefined ? record.useExpStart : true,
       expStartTime: record.expStartTime || (record.exp ? record.exp.split(" - ")[0]?.replace(" WIB", "") : ""),
+      useExpEnd: record.useExpEnd !== undefined ? record.useExpEnd : true,
       expEndTime: record.expEndTime || (record.exp ? (record.exp.split(" - ")[1] || "").replace(" WIB", "") : ""),
       price: record.price || "",
       notes: record.notes || "",
@@ -379,20 +392,38 @@ export default function App() {
               </label>
 
               <label className="field">
-                <span>Jam Awal Batas Konsumsi</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <input
+                    type="checkbox"
+                    checked={form.useExpStart !== false}
+                    onChange={(e) => change("useExpStart", e.target.checked)}
+                    style={{ width: "16px", height: "16px", cursor: "pointer", margin: 0 }}
+                  />
+                  <span>Jam Awal Batas Konsumsi</span>
+                </div>
                 <input
                   type="time"
                   value={form.expStartTime}
                   onChange={(e) => change("expStartTime", e.target.value)}
+                  disabled={form.useExpStart === false}
                 />
               </label>
 
               <label className="field">
-                <span>Jam Akhir Batas Konsumsi</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <input
+                    type="checkbox"
+                    checked={form.useExpEnd !== false}
+                    onChange={(e) => change("useExpEnd", e.target.checked)}
+                    style={{ width: "16px", height: "16px", cursor: "pointer", margin: 0 }}
+                  />
+                  <span>Jam Akhir Batas Konsumsi</span>
+                </div>
                 <input
                   type="time"
                   value={form.expEndTime}
                   onChange={(e) => change("expEndTime", e.target.value)}
+                  disabled={form.useExpEnd === false}
                 />
               </label>
 
