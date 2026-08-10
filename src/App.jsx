@@ -10,7 +10,7 @@ import {
 import { generateCoupons, formatDateID } from "./lib/coupon";
 
 const EMPTY_FORM = {
-  label: "PROGRAM MBG",
+  label: "NAMA SPPG",
   menuName: "1. Nasi Putih Sehat\n2. Ayam Crispy Gurih\n3. Melon Segar\n4. Susu UHT",
   date: new Date().toISOString().slice(0, 10),
   quantity: 10,
@@ -233,7 +233,7 @@ export default function App() {
                 <input
                   value={form.label}
                   onChange={(e) => change("label", e.target.value)}
-                  placeholder="Contoh: PROGRAM MBG"
+                  placeholder="Contoh: NAMA SPPG"
                   required
                 />
               </label>
