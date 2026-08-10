@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search, Upload, CheckSquare, Square, Palette, Image as ImageIcon } from "lucide-react";
+import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search, Upload, CheckSquare, Square, Palette, Image as ImageIcon, Clock } from "lucide-react";
 import CouponCard from "./components/CouponCard";
 import {
   clearGenerations,
@@ -28,7 +28,8 @@ const DEFAULT_DISPLAY_OPTIONS = {
 const EMPTY_FORM = {
   label: "NAMA SPPG",
   batch: "Batch 01",
-  exp: "",
+  expStartTime: "08:00",
+  expEndTime: "12:00",
   price: "",
   notes: "",
   logoUrl: "",
@@ -61,6 +62,15 @@ function normalizeNutrition(form) {
     carbs: form.carbs || "0",
     fiber: form.fiber || "0"
   };
+}
+
+function formatExpTime(startTime, endTime) {
+  if (startTime && endTime) {
+    return `${startTime} - ${endTime} WIB`;
+  }
+  if (startTime) return `${startTime} WIB`;
+  if (endTime) return `${endTime} WIB`;
+  return "";
 }
 
 export default function App() {
@@ -200,13 +210,15 @@ export default function App() {
       return;
     }
 
+    const expString = formatExpTime(form.expStartTime, form.expEndTime);
+
     setLoading(true);
     try {
       const rawCoupons = generateCoupons({
         quantity,
         label: (form.label || "").trim(),
         batch: (form.batch || "").trim(),
-        exp: (form.exp || "").trim(),
+        exp: expString,
         price: (form.price || "").trim(),
         notes: (form.notes || "").trim(),
         menuName: (form.menuName || "").trim(),
@@ -227,7 +239,9 @@ export default function App() {
         createdAt: Date.now(),
         label: (form.label || "").trim(),
         batch: (form.batch || "").trim(),
-        exp: (form.exp || "").trim(),
+        expStartTime: form.expStartTime || "",
+        expEndTime: form.expEndTime || "",
+        exp: expString,
         price: (form.price || "").trim(),
         notes: (form.notes || "").trim(),
         menuName: (form.menuName || "").trim(),
@@ -269,7 +283,8 @@ export default function App() {
     setForm({
       label: record.label || "",
       batch: record.batch || "",
-      exp: record.exp || "",
+      expStartTime: record.expStartTime || (record.exp ? record.exp.split(" - ")[0]?.replace(" WIB", "") : ""),
+      expEndTime: record.expEndTime || (record.exp ? (record.exp.split(" - ")[1] || "").replace(" WIB", "") : ""),
       price: record.price || "",
       notes: record.notes || "",
       logoUrl: record.logoUrl || "",
@@ -364,11 +379,20 @@ export default function App() {
               </label>
 
               <label className="field">
-                <span>Tgl Exp / Kadaluarsa</span>
+                <span>Jam Awal Batas Konsumsi</span>
                 <input
-                  value={form.exp}
-                  onChange={(e) => change("exp", e.target.value)}
-                  placeholder="Contoh: 10 Aug 2026 14:00"
+                  type="time"
+                  value={form.expStartTime}
+                  onChange={(e) => change("expStartTime", e.target.value)}
+                />
+              </label>
+
+              <label className="field">
+                <span>Jam Akhir Batas Konsumsi</span>
+                <input
+                  type="time"
+                  value={form.expEndTime}
+                  onChange={(e) => change("expEndTime", e.target.value)}
                 />
               </label>
 
@@ -381,7 +405,7 @@ export default function App() {
                 />
               </label>
 
-              <label className="field">
+              <label className="field field-full">
                 <span>Jumlah Label</span>
                 <input
                   type="number"
@@ -508,7 +532,7 @@ export default function App() {
                   checked={form.displayOptions?.showExp !== false}
                   onChange={(e) => toggleDisplay("showExp", e.target.checked)}
                 />
-                <span>Tampilkan Tgl Exp / Kadaluarsa</span>
+                <span>Tampilkan Jam Exp / Kadaluarsa</span>
               </label>
 
               <label className="checkbox-item">
