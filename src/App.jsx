@@ -22,6 +22,7 @@ const DEFAULT_DISPLAY_OPTIONS = {
   showCode: true,
   showNumbering: true,
   showFooterText: true,
+  showFooterLogos: true,
   showFooterNumber: false
 };
 
@@ -35,6 +36,7 @@ const EMPTY_FORM = {
   price: "",
   notes: "",
   logoUrl: "",
+  footerLogos: [],
   theme: "blue",
   menuName: "1. Nasi Putih Sehat\n2. Ayam Crispy Gurih\n3. Melon Segar\n4. Susu UHT",
   date: new Date().toISOString().slice(0, 10),
@@ -135,6 +137,7 @@ export default function App() {
         showCode: true,
         showNumbering: true,
         showFooterText: true,
+        showFooterLogos: true,
         showFooterNumber: true
       }
     }));
@@ -156,6 +159,7 @@ export default function App() {
         showCode: false,
         showNumbering: false,
         showFooterText: false,
+        showFooterLogos: false,
         showFooterNumber: false
       }
     }));
@@ -177,6 +181,32 @@ export default function App() {
 
   function removeLogo() {
     setForm((prev) => ({ ...prev, logoUrl: "" }));
+  }
+
+  function handleFooterLogoUpload(e, slotIndex) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Ukuran gambar logo maksimal 2MB.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setForm((prev) => {
+        const updated = [...(prev.footerLogos || [])];
+        updated[slotIndex] = event.target.result;
+        return { ...prev, footerLogos: updated };
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeFooterLogo(slotIndex) {
+    setForm((prev) => {
+      const updated = [...(prev.footerLogos || [])];
+      updated.splice(slotIndex, 1);
+      return { ...prev, footerLogos: updated };
+    });
   }
 
   const CHUNK_SIZE = 100;
@@ -233,6 +263,7 @@ export default function App() {
         menuName: (form.menuName || "").trim(),
         date: form.date || "",
         logoUrl: form.logoUrl || "",
+        footerLogos: (form.footerLogos || []).filter(Boolean),
         theme: form.theme || "blue",
         nutrition: normalizeNutrition(form),
         displayOptions: { ...form.displayOptions }
@@ -258,6 +289,7 @@ export default function App() {
         menuName: (form.menuName || "").trim(),
         date: form.date || "",
         logoUrl: form.logoUrl || "",
+        footerLogos: (form.footerLogos || []).filter(Boolean),
         theme: form.theme || "blue",
         quantity,
         displayOptions: { ...form.displayOptions },
@@ -301,6 +333,7 @@ export default function App() {
       price: record.price || "",
       notes: record.notes || "",
       logoUrl: record.logoUrl || "",
+      footerLogos: record.footerLogos || [],
       theme: record.theme || "blue",
       menuName: record.menuName || "",
       date: record.date || "",
@@ -490,7 +523,46 @@ export default function App() {
                   rows={2}
                 />
               </label>
+
+              <div className="field field-full footer-logos-upload-field">
+                <span><ImageIcon size={14} style={{ display: "inline", marginRight: 4 }} /> Logo Tambahan Footer (Maks. 5 gambar, ditampilkan di kanan footer)</span>
+                <div className="footer-logos-grid">
+                  {[0, 1, 2, 3, 4].map((i) => {
+                    const hasImg = Boolean((form.footerLogos || [])[i]);
+                    return (
+                      <div key={i} className={`footer-logo-slot ${hasImg ? "filled" : "empty"}`}>
+                        {hasImg ? (
+                          <>
+                            <img src={form.footerLogos[i]} alt={`Footer Logo ${i + 1}`} className="footer-logo-preview" />
+                            <button
+                              type="button"
+                              className="footer-logo-remove"
+                              onClick={() => removeFooterLogo(i)}
+                              title="Hapus gambar ini"
+                            >✕</button>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id={`footer-logo-input-${i}`}
+                              className="file-input-hidden"
+                              onChange={(e) => handleFooterLogoUpload(e, i)}
+                            />
+                            <label htmlFor={`footer-logo-input-${i}`} className="footer-logo-add">
+                              <Upload size={16} />
+                              <span>Logo {i + 1}</span>
+                            </label>
+                          </>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
+
 
             <div className="section-caption"><Palette size={16} style={{ display: "inline", marginRight: 6 }} /> Pilih Desain / Warna Label</div>
 
@@ -637,7 +709,17 @@ export default function App() {
                 />
                 <span>Tampilkan Nomor Urut Cetak (1, 2, 3...)</span>
               </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showFooterLogos !== false}
+                  onChange={(e) => toggleDisplay("showFooterLogos", e.target.checked)}
+                />
+                <span>Tampilkan Logo Tambahan Footer</span>
+              </label>
             </div>
+
 
             <div className="section-caption">Informasi Nilai Gizi</div>
 

@@ -340,7 +340,110 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .coupon-code-row strong { font-size: 12px; letter-spacing: 1.2px; color: #0f172a; }
 .fake-qr { width: 38px; height: 38px; border: 3px solid #1e3a8a; display: grid; place-items: center; font-size: 5px; font-weight: 900; line-height: 1; position: relative; background: repeating-linear-gradient(45deg,#fff 0,#fff 3px,#1e3a8a 3px,#1e3a8a 5px); }
 .fake-qr span { background: #fff; padding: 1px; }
-.coupon-footer { border-top: 1px solid #e2e8f0; padding: 6px 14px; display: flex; justify-content: space-between; color: #64748b; font-size: 7px; font-weight: 500; }
+.coupon-footer {
+  border-top: 1px solid #e2e8f0;
+  padding: 5px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 7px;
+  font-weight: 500;
+}
+.coupon-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+.footer-print-number {
+  font-weight: 700;
+  color: #1e293b;
+}
+.coupon-footer-logos {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.coupon-footer-logo-img {
+  max-width: 22px;
+  max-height: 22px;
+  object-fit: contain;
+  border-radius: 3px;
+  background: #fff;
+}
+
+/* Footer logos upload grid in form */
+.footer-logos-upload-field { margin-top: 6px; }
+.footer-logos-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.footer-logo-slot {
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  border: 1.5px dashed #cbd5e1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.footer-logo-slot.filled {
+  border-style: solid;
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+.footer-logo-slot:hover { border-color: #3b82f6; }
+.footer-logo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+.footer-logo-remove {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  font-size: 10px;
+  font-weight: 900;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  padding: 0;
+  z-index: 2;
+}
+.footer-logo-remove:hover { background: #991b1b; }
+.footer-logo-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 600;
+}
+.footer-logo-add:hover { color: #2563eb; }
+
 
 .empty-preview { min-height: 260px; display: grid; place-items: center; align-content: center; color: #94a3b8; text-align: center; }
 .empty-preview h3 { margin: 8px 0 3px; color: #475569; }
@@ -606,5 +709,16 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   .coupon-code-row strong { font-size: 6.5pt; letter-spacing: 0.8px; color: #0f172a !important; }
   .fake-qr { width: 7.5mm; height: 7.5mm; border: .4mm solid #1e3a8a; background: repeating-linear-gradient(45deg,#fff 0,#fff 2px,#1e3a8a 2px,#1e3a8a 3.5px) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .fake-qr span { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .coupon-footer { padding: 0.8mm 2.5mm; font-size: 4pt; border-top: .2mm solid #e2e8f0; }
+  .coupon-footer {
+    padding: 0.6mm 2.5mm;
+    font-size: 4pt;
+    border-top: .2mm solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1mm;
+  }
+  .coupon-footer-left { display: flex; align-items: center; gap: 1.5mm; flex: 1; min-width: 0; }
+  .coupon-footer-logos { display: flex; align-items: center; gap: 0.8mm; flex-shrink: 0; }
+  .coupon-footer-logo-img { max-width: 5mm; max-height: 5mm; object-fit: contain; border-radius: 0.5mm; background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }

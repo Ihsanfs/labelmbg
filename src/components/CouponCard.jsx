@@ -13,10 +13,17 @@ export default function CouponCard({ coupon, index }) {
     showCode: coupon.showCode !== false,
     showNumbering: coupon.showNumbering !== false,
     showFooterText: true,
+    showFooterLogos: true,
     showFooterNumber: coupon.showFooterNumber === true
   };
 
   const themeClass = `theme-${coupon.theme || "blue"}`;
+  const footerLogos = coupon.footerLogos || [];
+
+  const hasFooter =
+    disp.showFooterText !== false ||
+    disp.showFooterNumber ||
+    (disp.showFooterLogos !== false && footerLogos.length > 0);
 
   return (
     <article className={`coupon-card ${themeClass}`}>
@@ -133,15 +140,27 @@ export default function CouponCard({ coupon, index }) {
         )}
       </div>
 
-      {(disp.showFooterText !== false || disp.showFooterNumber) && (
+      {hasFooter && (
         <div className="coupon-footer">
-          {disp.showFooterText !== false ? (
-            <span>Harap dipedomani sesuai ketentuan konsumsi makanan.</span>
-          ) : (
-            <span></span>
-          )}
-          {disp.showFooterNumber && (
-            <span>{index}</span>
+          <div className="coupon-footer-left">
+            {disp.showFooterText !== false && (
+              <span>Harap dipedomani sesuai ketentuan konsumsi makanan.</span>
+            )}
+            {disp.showFooterNumber && (
+              <span className="footer-print-number">{index}</span>
+            )}
+          </div>
+          {disp.showFooterLogos !== false && footerLogos.length > 0 && (
+            <div className="coupon-footer-logos">
+              {footerLogos.map((url, i) => (
+                <img
+                  key={i}
+                  src={url}
+                  alt={`Footer logo ${i + 1}`}
+                  className="coupon-footer-logo-img"
+                />
+              ))}
+            </div>
           )}
         </div>
       )}

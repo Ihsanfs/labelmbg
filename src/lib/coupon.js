@@ -19,6 +19,7 @@ export function makeCoupon({
   price,
   notes,
   logoUrl,
+  footerLogos,
   theme,
   nutrition,
   displayOptions
@@ -36,6 +37,7 @@ export function makeCoupon({
     price: price || "",
     notes: notes || "",
     logoUrl: logoUrl || "",
+    footerLogos: footerLogos || [],
     theme: theme || "blue",
     nutrition,
     displayOptions: displayOptions || {
@@ -51,6 +53,7 @@ export function makeCoupon({
       showCode: true,
       showNumbering: true,
       showFooterText: true,
+      showFooterLogos: true,
       showFooterNumber: false
     }
   };
@@ -66,6 +69,7 @@ export function generateCoupons({
   price,
   notes,
   logoUrl,
+  footerLogos,
   theme,
   nutrition,
   displayOptions
@@ -81,6 +85,7 @@ export function generateCoupons({
       price,
       notes,
       logoUrl,
+      footerLogos,
       theme,
       nutrition,
       displayOptions
