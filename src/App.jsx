@@ -16,6 +16,7 @@ const DEFAULT_DISPLAY_OPTIONS = {
   showBatch: true,
   showExp: true,
   showPrice: true,
+  showNotes: true,
   showMenu: true,
   showNutrition: true,
   showCode: true,
@@ -29,6 +30,7 @@ const EMPTY_FORM = {
   batch: "Batch 01",
   exp: "",
   price: "",
+  notes: "",
   logoUrl: "",
   theme: "blue",
   menuName: "1. Nasi Putih Sehat\n2. Ayam Crispy Gurih\n3. Melon Segar\n4. Susu UHT",
@@ -108,6 +110,7 @@ export default function App() {
         showBatch: true,
         showExp: true,
         showPrice: true,
+        showNotes: true,
         showMenu: true,
         showNutrition: true,
         showCode: true,
@@ -128,6 +131,7 @@ export default function App() {
         showBatch: false,
         showExp: false,
         showPrice: false,
+        showNotes: false,
         showMenu: false,
         showNutrition: false,
         showCode: false,
@@ -204,6 +208,7 @@ export default function App() {
         batch: (form.batch || "").trim(),
         exp: (form.exp || "").trim(),
         price: (form.price || "").trim(),
+        notes: (form.notes || "").trim(),
         menuName: (form.menuName || "").trim(),
         date: form.date || "",
         logoUrl: form.logoUrl || "",
@@ -224,6 +229,7 @@ export default function App() {
         batch: (form.batch || "").trim(),
         exp: (form.exp || "").trim(),
         price: (form.price || "").trim(),
+        notes: (form.notes || "").trim(),
         menuName: (form.menuName || "").trim(),
         date: form.date || "",
         logoUrl: form.logoUrl || "",
@@ -265,6 +271,7 @@ export default function App() {
       batch: record.batch || "",
       exp: record.exp || "",
       price: record.price || "",
+      notes: record.notes || "",
       logoUrl: record.logoUrl || "",
       theme: record.theme || "blue",
       menuName: record.menuName || "",
@@ -418,6 +425,16 @@ export default function App() {
                   rows={4}
                 />
               </label>
+
+              <label className="field field-full">
+                <span>Keterangan Lainnya / Catatan Khusus</span>
+                <textarea
+                  value={form.notes}
+                  onChange={(e) => change("notes", e.target.value)}
+                  placeholder="Contoh: Simpan di tempat sejuk. Best before 2 jam setelah diterima."
+                  rows={2}
+                />
+              </label>
             </div>
 
             <div className="section-caption"><Palette size={16} style={{ display: "inline", marginRight: 6 }} /> Pilih Desain / Warna Label</div>
@@ -501,6 +518,15 @@ export default function App() {
                   onChange={(e) => toggleDisplay("showPrice", e.target.checked)}
                 />
                 <span>Tampilkan Harga</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showNotes !== false}
+                  onChange={(e) => toggleDisplay("showNotes", e.target.checked)}
+                />
+                <span>Tampilkan Keterangan Lainnya</span>
               </label>
 
               <label className="checkbox-item">

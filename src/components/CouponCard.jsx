@@ -80,6 +80,13 @@ export default function CouponCard({ coupon, index }) {
                 )}
               </div>
             )}
+
+            {disp.showNotes !== false && coupon.notes && (
+              <div className="coupon-notes-container">
+                <span className="coupon-notes-tag">KETERANGAN</span>
+                <div className="coupon-notes-text">{coupon.notes}</div>
+              </div>
+            )}
           </div>
 
           {disp.showNutrition !== false && (
