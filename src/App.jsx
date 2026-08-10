@@ -16,6 +16,7 @@ const EMPTY_FORM = {
   quantity: 10,
   showCode: true,
   showNumbering: true,
+  showFooterNumber: false,
   energy: "",
   protein: "",
   fat: "",
@@ -121,6 +122,7 @@ export default function App() {
         date: form.date,
         showCode: form.showCode,
         showNumbering: form.showNumbering,
+        showFooterNumber: form.showFooterNumber,
         nutrition: normalizeNutrition(form)
       });
 

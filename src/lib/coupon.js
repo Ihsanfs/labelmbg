@@ -25,7 +25,7 @@ export function makeCoupon({ index, label, menuName, date, nutrition, showCode, 
   };
 }
 
-export function generateCoupons({ quantity, label, menuName, date, nutrition, showCode, showNumbering }) {
+export function generateCoupons({ quantity, label, menuName, date, nutrition, showCode, showNumbering, showFooterNumber }) {
   return Array.from({ length: quantity }, (_, i) =>
     makeCoupon({
       index: i + 1,
@@ -34,7 +34,8 @@ export function generateCoupons({ quantity, label, menuName, date, nutrition, sh
       date,
       nutrition,
       showCode,
-      showNumbering
+      showNumbering,
+      showFooterNumber
     })
   );
 }
@@ -45,4 +46,5 @@ export function formatDateID(dateString) {
     day: "2-digit",
     month: "long",
     year: "numeric"
-  }).forma
+  }).format(new Date(`${dateString}T00:00:00`));
+}
