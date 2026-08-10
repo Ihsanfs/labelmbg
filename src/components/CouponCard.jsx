@@ -16,15 +16,40 @@ export default function CouponCard({ coupon, index }) {
       <div className="coupon-body">
         <div className="coupon-main-content">
           <div className="coupon-left-col">
-            <div className="coupon-date">
-              <span>Tanggal</span>
-              <strong>{coupon.dateLabel}</strong>
+            <div className="coupon-date-row">
+              <div className="coupon-date">
+                <span>Tanggal</span>
+                <strong>{coupon.dateLabel}</strong>
+              </div>
+              {coupon.batch && (
+                <div className="coupon-batch">
+                  <span>Batch</span>
+                  <strong>{coupon.batch}</strong>
+                </div>
+              )}
             </div>
 
             <div className="coupon-menu-container">
               <span className="coupon-menu-tag">MENU</span>
               <div className="coupon-menu-name">{coupon.menuName || "-"}</div>
             </div>
+
+            {(coupon.exp || coupon.price) && (
+              <div className="coupon-extra-row">
+                {coupon.exp && (
+                  <div className="coupon-exp">
+                    <span>EXP</span>
+                    <strong>{coupon.exp}</strong>
+                  </div>
+                )}
+                {coupon.price && (
+                  <div className="coupon-price">
+                    <span>HARGA</span>
+                    <strong>{coupon.price}</strong>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="coupon-right-col">

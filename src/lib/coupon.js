@@ -9,7 +9,7 @@ export function randomCode(length = 10) {
   return Array.from(values, (v) => chars[v % chars.length]).join("");
 }
 
-export function makeCoupon({ index, label, menuName, date, nutrition, showCode, showNumbering, showFooterNumber }) {
+export function makeCoupon({ index, label, menuName, date, batch, exp, price, nutrition, showCode, showNumbering, showFooterNumber }) {
   const code = randomCode(10);
   return {
     id: `${Date.now()}-${index}-${code}`,
@@ -18,6 +18,9 @@ export function makeCoupon({ index, label, menuName, date, nutrition, showCode, 
     label,
     menuName,
     date,
+    batch: batch || "",
+    exp: exp || "",
+    price: price || "",
     nutrition,
     showCode,
     showNumbering,
@@ -25,13 +28,16 @@ export function makeCoupon({ index, label, menuName, date, nutrition, showCode, 
   };
 }
 
-export function generateCoupons({ quantity, label, menuName, date, nutrition, showCode, showNumbering, showFooterNumber }) {
+export function generateCoupons({ quantity, label, menuName, date, batch, exp, price, nutrition, showCode, showNumbering, showFooterNumber }) {
   return Array.from({ length: quantity }, (_, i) =>
     makeCoupon({
       index: i + 1,
       label,
       menuName,
       date,
+      batch,
+      exp,
+      price,
       nutrition,
       showCode,
       showNumbering,

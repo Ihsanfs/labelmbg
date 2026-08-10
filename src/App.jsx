@@ -11,6 +11,9 @@ import { generateCoupons, formatDateID } from "./lib/coupon";
 
 const EMPTY_FORM = {
   label: "NAMA SPPG",
+  batch: "Batch 01",
+  exp: "",
+  price: "",
   menuName: "1. Nasi Putih Sehat\n2. Ayam Crispy Gurih\n3. Melon Segar\n4. Susu UHT",
   date: new Date().toISOString().slice(0, 10),
   quantity: 10,
@@ -118,6 +121,9 @@ export default function App() {
       const rawCoupons = generateCoupons({
         quantity,
         label: form.label.trim(),
+        batch: form.batch ? form.batch.trim() : "",
+        exp: form.exp ? form.exp.trim() : "",
+        price: form.price ? form.price.trim() : "",
         menuName: form.menuName.trim(),
         date: form.date,
         showCode: form.showCode,
@@ -135,6 +141,9 @@ export default function App() {
         id: crypto.randomUUID(),
         createdAt: Date.now(),
         label: form.label.trim(),
+        batch: form.batch ? form.batch.trim() : "",
+        exp: form.exp ? form.exp.trim() : "",
+        price: form.price ? form.price.trim() : "",
         menuName: form.menuName.trim(),
         date: form.date,
         quantity,
@@ -169,6 +178,9 @@ export default function App() {
   async function loadGeneration(record) {
     setForm({
       label: record.label,
+      batch: record.batch || "",
+      exp: record.exp || "",
+      price: record.price || "",
       menuName: record.menuName || "",
       date: record.date,
       quantity: record.quantity,
@@ -228,8 +240,8 @@ export default function App() {
 
           <form onSubmit={handleGenerate}>
             <div className="form-grid">
-              <label className="field field-wide">
-                <span>Label</span>
+              <label className="field">
+                <span>Nama SPPG / Label</span>
                 <input
                   value={form.label}
                   onChange={(e) => change("label", e.target.value)}
@@ -239,12 +251,39 @@ export default function App() {
               </label>
 
               <label className="field">
-                <span>Tanggal</span>
+                <span>Batch Pengiriman</span>
+                <input
+                  value={form.batch}
+                  onChange={(e) => change("batch", e.target.value)}
+                  placeholder="Contoh: Batch 01"
+                />
+              </label>
+
+              <label className="field">
+                <span>Tanggal Produksi</span>
                 <input
                   type="date"
                   value={form.date}
                   onChange={(e) => change("date", e.target.value)}
                   required
+                />
+              </label>
+
+              <label className="field">
+                <span>Tgl Exp / Kadaluarsa</span>
+                <input
+                  value={form.exp}
+                  onChange={(e) => change("exp", e.target.value)}
+                  placeholder="Contoh: 10 Aug 2026 14:00"
+                />
+              </label>
+
+              <label className="field">
+                <span>Harga</span>
+                <input
+                  value={form.price}
+                  onChange={(e) => change("price", e.target.value)}
+                  placeholder="Contoh: Rp 15.000"
                 />
               </label>
 
