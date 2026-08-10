@@ -19,15 +19,14 @@ export default function CouponCard({ coupon, index }) {
 
   const themeClass = `theme-${coupon.theme || "blue"}`;
   const footerLogos = coupon.footerLogos || [];
+  const hasExtraLogos = disp.showFooterLogos !== false && footerLogos.length > 0;
 
-  const hasFooter =
-    disp.showFooterText !== false ||
-    disp.showFooterNumber ||
-    (disp.showFooterLogos !== false && footerLogos.length > 0);
+  const hasFooter = disp.showFooterText !== false || disp.showFooterNumber;
 
   return (
     <article className={`coupon-card ${themeClass}`}>
       <div className="coupon-header">
+        {/* Left: main logo + label text */}
         <div className="coupon-header-brand">
           {coupon.logoUrl && disp.showLogo !== false && (
             <img src={coupon.logoUrl} alt="Logo" className="coupon-logo-img" />
@@ -39,9 +38,25 @@ export default function CouponCard({ coupon, index }) {
             <div className="coupon-title">LABEL INFORMASI MAKANAN</div>
           </div>
         </div>
-        {disp.showNumbering !== false && (
-          <div className="coupon-number">#{coupon.number}</div>
-        )}
+
+        {/* Right: extra logos + numbering */}
+        <div className="coupon-header-right">
+          {hasExtraLogos && (
+            <div className="coupon-header-extra-logos">
+              {footerLogos.map((url, i) => (
+                <img
+                  key={i}
+                  src={url}
+                  alt={`Logo ${i + 1}`}
+                  className="coupon-header-extra-logo-img"
+                />
+              ))}
+            </div>
+          )}
+          {disp.showNumbering !== false && (
+            <div className="coupon-number">#{coupon.number}</div>
+          )}
+        </div>
       </div>
 
       <div className="coupon-body">
@@ -146,21 +161,9 @@ export default function CouponCard({ coupon, index }) {
             {disp.showFooterText !== false && (
               <span>Harap dipedomani sesuai ketentuan konsumsi makanan.</span>
             )}
-            {disp.showFooterNumber && (
-              <span className="footer-print-number">{index}</span>
-            )}
           </div>
-          {disp.showFooterLogos !== false && footerLogos.length > 0 && (
-            <div className="coupon-footer-logos">
-              {footerLogos.map((url, i) => (
-                <img
-                  key={i}
-                  src={url}
-                  alt={`Footer logo ${i + 1}`}
-                  className="coupon-footer-logo-img"
-                />
-              ))}
-            </div>
+          {disp.showFooterNumber && (
+            <span className="footer-print-number">{index}</span>
           )}
         </div>
       )}

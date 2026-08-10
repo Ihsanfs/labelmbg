@@ -525,7 +525,7 @@ export default function App() {
               </label>
 
               <div className="field field-full footer-logos-upload-field">
-                <span><ImageIcon size={14} style={{ display: "inline", marginRight: 4 }} /> Logo Tambahan Footer (Maks. 5 gambar, ditampilkan di kanan footer)</span>
+                <span><ImageIcon size={14} style={{ display: "inline", marginRight: 4 }} /> Logo Tambahan Header (Maks. 5 gambar, ditampilkan di kanan header label)</span>
                 <div className="footer-logos-grid">
                   {[0, 1, 2, 3, 4].map((i) => {
                     const hasImg = Boolean((form.footerLogos || [])[i]);
@@ -716,7 +716,7 @@ export default function App() {
                   checked={form.displayOptions?.showFooterLogos !== false}
                   onChange={(e) => toggleDisplay("showFooterLogos", e.target.checked)}
                 />
-                <span>Tampilkan Logo Tambahan Footer</span>
+                <span>Tampilkan Logo Tambahan Header</span>
               </label>
             </div>
 

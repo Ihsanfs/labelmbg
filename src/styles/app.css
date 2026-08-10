@@ -138,11 +138,33 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   border-bottom: 1.5px dashed #bfdbfe;
   color: #ffffff;
 }
-.coupon-header-brand { display: flex; align-items: center; gap: 8px; }
-.coupon-logo-img { max-width: 32px; max-height: 32px; object-fit: contain; border-radius: 5px; background: #fff; padding: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+.coupon-header-brand { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.coupon-logo-img { max-width: 32px; max-height: 32px; object-fit: contain; border-radius: 5px; background: #fff; padding: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); flex-shrink: 0; }
 .coupon-label { font-weight: 900; font-size: 13px; letter-spacing: .5px; text-shadow: 0 1px 2px rgba(0,0,0,0.15); }
 .coupon-title { margin-top: 2px; font-size: 9px; color: #bfdbfe; font-weight: 700; letter-spacing: 0.5px; }
-.coupon-number { font-size: 13px; font-weight: 900; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px; }
+.coupon-number { font-size: 13px; font-weight: 900; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px; white-space: nowrap; }
+
+/* Header right: extra logos + numbering */
+.coupon-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.coupon-header-extra-logos {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.coupon-header-extra-logo-img {
+  max-width: 26px;
+  max-height: 26px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.15);
+  padding: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
 
 /* Color Themes */
 /* Blue Theme (Default) */
@@ -606,6 +628,10 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   .coupon-label { font-size: 8.5pt; color: #fff !important; }
   .coupon-title { font-size: 5pt; color: #bfdbfe !important; }
   .coupon-number { font-size: 7.5pt; color: #fff !important; background: rgba(255,255,255,0.2) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .coupon-header-right { display: flex; align-items: center; gap: 1.2mm; flex-shrink: 0; }
+  .coupon-header-extra-logos { display: flex; align-items: center; gap: 0.8mm; }
+  .coupon-header-extra-logo-img { max-width: 6mm; max-height: 6mm; object-fit: contain; border-radius: 0.6mm; background: rgba(255,255,255,0.15) !important; padding: 0.3mm; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
   .coupon-body { padding: 1.5mm 2.5mm; flex: 1; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
   .coupon-main-content {
     display: flex;
