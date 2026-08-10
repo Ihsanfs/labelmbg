@@ -6,7 +6,7 @@ export default function CouponCard({ coupon, index }) {
       <div className="coupon-header">
         <div>
           <div className="coupon-label">{coupon.label}</div>
-          <div className="coupon-title">LABEL KONSUMSI</div>
+          <div className="coupon-title">LABEL INFORMASI MAKANAN</div>
         </div>
         {coupon.showNumbering !== false && (
           <div className="coupon-number">#{coupon.number}</div>
