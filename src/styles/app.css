@@ -258,6 +258,8 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   .nutrition-inputs .field:last-child { grid-column: 1 / -1; }
   .generate-bar, .preview-header, .history-head { align-items: stretch; flex-direction: column; }
   .print-sheet { padding: 8px; }
+}
+
 .progress-overlay {
   position: fixed;
   inset: 0;
