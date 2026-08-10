@@ -58,6 +58,38 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 
 .generate-bar { margin-top: 22px; padding-top: 18px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
 .quantity-info { display: flex; flex-direction: column; }
+
+/* Logo Upload & Controls */
+.logo-upload-field { margin-top: 6px; }
+.logo-upload-box { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+.file-input-hidden { display: none; }
+.logo-preview-badge { display: flex; align-items: center; gap: 8px; background: #f1f5f9; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; }
+.logo-preview-badge img { max-width: 28px; max-height: 28px; object-fit: contain; border-radius: 4px; background: #fff; }
+.logo-preview-badge span { font-size: 12px; font-weight: 700; color: #1e293b; }
+
+/* Theme Selector */
+.theme-selector-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.theme-badge {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px;
+  border: 1px solid #cbd5e1; border-radius: 8px; background: #fff;
+  font-weight: 700; font-size: 12px; color: #334155; transition: all 0.2s ease;
+}
+.theme-badge:hover { border-color: #3b82f6; transform: translateY(-1px); }
+.theme-badge.active { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
+.theme-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+/* Checkbox Grid & Master Toggles */
+.section-caption-header { display: flex; justify-content: space-between; align-items: center; margin: 24px 0 12px; }
+.section-caption-header .section-caption { margin: 0; }
+.master-toggle-buttons { display: flex; gap: 8px; }
+
+.checkbox-options-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  background: #f8fafc; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0;
+}
+.checkbox-item { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.checkbox-item input { width: 16px; height: 16px; cursor: pointer; accent-color: #2563eb; }
+.checkbox-item span { font-size: 12px; font-weight: 600; color: #334155; }
 .quantity-info strong { font-size: 25px; }
 .quantity-info span { color: #64748b; font-size: 12px; }
 
@@ -106,9 +138,47 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   border-bottom: 1.5px dashed #bfdbfe;
   color: #ffffff;
 }
+.coupon-header-brand { display: flex; align-items: center; gap: 8px; }
+.coupon-logo-img { max-width: 32px; max-height: 32px; object-fit: contain; border-radius: 5px; background: #fff; padding: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
 .coupon-label { font-weight: 900; font-size: 13px; letter-spacing: .5px; text-shadow: 0 1px 2px rgba(0,0,0,0.15); }
 .coupon-title { margin-top: 2px; font-size: 9px; color: #bfdbfe; font-weight: 700; letter-spacing: 0.5px; }
 .coupon-number { font-size: 13px; font-weight: 900; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px; }
+
+/* Color Themes */
+/* Blue Theme (Default) */
+.coupon-card.theme-blue { background: linear-gradient(135deg, #eff6ff 0%, #ffffff 60%, #ffffff 100%); border-color: #bfdbfe; }
+.coupon-card.theme-blue .coupon-header { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); border-color: #bfdbfe; }
+.coupon-card.theme-blue .coupon-menu-tag, .coupon-card.theme-blue .nutrition-header-title { background: #dbeafe; color: #1e40af; }
+
+/* Emerald Theme */
+.coupon-card.theme-emerald { background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 60%, #ffffff 100%); border-color: #a7f3d0; }
+.coupon-card.theme-emerald .coupon-header { background: linear-gradient(135deg, #065f46 0%, #10b981 100%); border-color: #a7f3d0; }
+.coupon-card.theme-emerald .coupon-title { color: #a7f3d0; }
+.coupon-card.theme-emerald .coupon-menu-tag, .coupon-card.theme-emerald .nutrition-header-title { background: #d1fae5; color: #047857; }
+
+/* Purple Theme */
+.coupon-card.theme-purple { background: linear-gradient(135deg, #faf5ff 0%, #ffffff 60%, #ffffff 100%); border-color: #ddd6fe; }
+.coupon-card.theme-purple .coupon-header { background: linear-gradient(135deg, #581c87 0%, #8b5cf6 100%); border-color: #ddd6fe; }
+.coupon-card.theme-purple .coupon-title { color: #ddd6fe; }
+.coupon-card.theme-purple .coupon-menu-tag, .coupon-card.theme-purple .nutrition-header-title { background: #f3e8ff; color: #6b21a8; }
+
+/* Amber Theme */
+.coupon-card.theme-amber { background: linear-gradient(135deg, #fffbeb 0%, #ffffff 60%, #ffffff 100%); border-color: #fde68a; }
+.coupon-card.theme-amber .coupon-header { background: linear-gradient(135deg, #78350f 0%, #f59e0b 100%); border-color: #fde68a; }
+.coupon-card.theme-amber .coupon-title { color: #fde68a; }
+.coupon-card.theme-amber .coupon-menu-tag, .coupon-card.theme-amber .nutrition-header-title { background: #fef3c7; color: #92400e; }
+
+/* Ruby Theme */
+.coupon-card.theme-ruby { background: linear-gradient(135deg, #fff1f2 0%, #ffffff 60%, #ffffff 100%); border-color: #fecdd3; }
+.coupon-card.theme-ruby .coupon-header { background: linear-gradient(135deg, #991b1b 0%, #ef4444 100%); border-color: #fecdd3; }
+.coupon-card.theme-ruby .coupon-title { color: #fecdd3; }
+.coupon-card.theme-ruby .coupon-menu-tag, .coupon-card.theme-ruby .nutrition-header-title { background: #ffe4e6; color: #9f1239; }
+
+/* Monochrome Theme */
+.coupon-card.theme-monochrome { background: linear-gradient(135deg, #f4f4f5 0%, #ffffff 60%, #ffffff 100%); border-color: #e4e4e7; }
+.coupon-card.theme-monochrome .coupon-header { background: linear-gradient(135deg, #18181b 0%, #52525b 100%); border-color: #e4e4e7; }
+.coupon-card.theme-monochrome .coupon-title { color: #e4e4e7; }
+.coupon-card.theme-monochrome .coupon-menu-tag, .coupon-card.theme-monochrome .nutrition-header-title { background: #e4e4e7; color: #27272a; }
 .coupon-body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
 .coupon-main-content {
   display: flex;
@@ -399,6 +469,7 @@ button:disabled { opacity: .55; cursor: not-allowed; }
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+  .coupon-logo-img { max-width: 7mm; max-height: 7mm; border-radius: 0.8mm; padding: 0.3mm; background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .coupon-label { font-size: 10pt; color: #fff !important; }
   .coupon-title { font-size: 6pt; color: #bfdbfe !important; }
   .coupon-number { font-size: 8pt; color: #fff !important; background: rgba(255,255,255,0.2) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }

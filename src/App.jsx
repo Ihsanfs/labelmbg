@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search } from "lucide-react";
+import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search, Upload, CheckSquare, Square, Palette, Image as ImageIcon } from "lucide-react";
 import CouponCard from "./components/CouponCard";
 import {
   clearGenerations,
@@ -9,23 +9,47 @@ import {
 } from "./lib/storage";
 import { generateCoupons, formatDateID } from "./lib/coupon";
 
+const DEFAULT_DISPLAY_OPTIONS = {
+  showLogo: true,
+  showLabel: true,
+  showDate: true,
+  showBatch: true,
+  showExp: true,
+  showPrice: true,
+  showMenu: true,
+  showNutrition: true,
+  showCode: true,
+  showNumbering: true,
+  showFooterText: true,
+  showFooterNumber: false
+};
+
 const EMPTY_FORM = {
   label: "NAMA SPPG",
   batch: "Batch 01",
   exp: "",
   price: "",
+  logoUrl: "",
+  theme: "blue",
   menuName: "1. Nasi Putih Sehat\n2. Ayam Crispy Gurih\n3. Melon Segar\n4. Susu UHT",
   date: new Date().toISOString().slice(0, 10),
   quantity: 10,
-  showCode: true,
-  showNumbering: true,
-  showFooterNumber: false,
+  displayOptions: { ...DEFAULT_DISPLAY_OPTIONS },
   energy: "",
   protein: "",
   fat: "",
   carbs: "",
   fiber: ""
 };
+
+const THEMES = [
+  { id: "blue", name: "Ocean Blue", color: "#2563eb" },
+  { id: "emerald", name: "Emerald Green", color: "#059669" },
+  { id: "purple", name: "Royal Purple", color: "#7c3aed" },
+  { id: "amber", name: "Sunset Amber", color: "#d97706" },
+  { id: "ruby", name: "Ruby Red", color: "#dc2626" },
+  { id: "monochrome", name: "Sleek Dark", color: "#27272a" }
+];
 
 function normalizeNutrition(form) {
   return {
@@ -56,12 +80,80 @@ export default function App() {
     const q = search.toLowerCase().trim();
     if (!q) return history;
     return history.filter((x) =>
-      `${x.label} ${x.menuName || ""} ${x.date} ${x.quantity}`.toLowerCase().includes(q)
+      `${x.label || ""} ${x.menuName || ""} ${x.date || ""} ${x.quantity}`.toLowerCase().includes(q)
     );
   }, [history, search]);
 
   function change(name, value) {
     setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function toggleDisplay(key, value) {
+    setForm((prev) => ({
+      ...prev,
+      displayOptions: {
+        ...prev.displayOptions,
+        [key]: value
+      }
+    }));
+  }
+
+  function checkAllDisplay() {
+    setForm((prev) => ({
+      ...prev,
+      displayOptions: {
+        showLogo: true,
+        showLabel: true,
+        showDate: true,
+        showBatch: true,
+        showExp: true,
+        showPrice: true,
+        showMenu: true,
+        showNutrition: true,
+        showCode: true,
+        showNumbering: true,
+        showFooterText: true,
+        showFooterNumber: true
+      }
+    }));
+  }
+
+  function uncheckAllDisplay() {
+    setForm((prev) => ({
+      ...prev,
+      displayOptions: {
+        showLogo: false,
+        showLabel: false,
+        showDate: false,
+        showBatch: false,
+        showExp: false,
+        showPrice: false,
+        showMenu: false,
+        showNutrition: false,
+        showCode: false,
+        showNumbering: false,
+        showFooterText: false,
+        showFooterNumber: false
+      }
+    }));
+  }
+
+  function handleLogoUpload(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Ukuran gambar logo maksimal 2MB.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setForm((prev) => ({ ...prev, logoUrl: event.target.result }));
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeLogo() {
+    setForm((prev) => ({ ...prev, logoUrl: "" }));
   }
 
   const CHUNK_SIZE = 100;
@@ -103,33 +195,21 @@ export default function App() {
       alert("Jumlah label harus 1 sampai 10.000.");
       return;
     }
-    if (!form.label.trim()) {
-      alert("Label wajib diisi.");
-      return;
-    }
-    if (!form.menuName || !form.menuName.trim()) {
-      alert("Nama menu wajib diisi.");
-      return;
-    }
-    if (!form.date) {
-      alert("Tanggal wajib dipilih.");
-      return;
-    }
 
     setLoading(true);
     try {
       const rawCoupons = generateCoupons({
         quantity,
-        label: form.label.trim(),
-        batch: form.batch ? form.batch.trim() : "",
-        exp: form.exp ? form.exp.trim() : "",
-        price: form.price ? form.price.trim() : "",
-        menuName: form.menuName.trim(),
-        date: form.date,
-        showCode: form.showCode,
-        showNumbering: form.showNumbering,
-        showFooterNumber: form.showFooterNumber,
-        nutrition: normalizeNutrition(form)
+        label: (form.label || "").trim(),
+        batch: (form.batch || "").trim(),
+        exp: (form.exp || "").trim(),
+        price: (form.price || "").trim(),
+        menuName: (form.menuName || "").trim(),
+        date: form.date || "",
+        logoUrl: form.logoUrl || "",
+        theme: form.theme || "blue",
+        nutrition: normalizeNutrition(form),
+        displayOptions: { ...form.displayOptions }
       });
 
       const generated = rawCoupons.map((coupon) => ({
@@ -140,15 +220,16 @@ export default function App() {
       const record = {
         id: crypto.randomUUID(),
         createdAt: Date.now(),
-        label: form.label.trim(),
-        batch: form.batch ? form.batch.trim() : "",
-        exp: form.exp ? form.exp.trim() : "",
-        price: form.price ? form.price.trim() : "",
-        menuName: form.menuName.trim(),
-        date: form.date,
+        label: (form.label || "").trim(),
+        batch: (form.batch || "").trim(),
+        exp: (form.exp || "").trim(),
+        price: (form.price || "").trim(),
+        menuName: (form.menuName || "").trim(),
+        date: form.date || "",
+        logoUrl: form.logoUrl || "",
+        theme: form.theme || "blue",
         quantity,
-        showCode: form.showCode,
-        showNumbering: form.showNumbering,
+        displayOptions: { ...form.displayOptions },
         nutrition: normalizeNutrition(form),
         coupons: generated
       };
@@ -163,7 +244,10 @@ export default function App() {
   }
 
   function resetForm() {
-    setForm(EMPTY_FORM);
+    setForm({
+      ...EMPTY_FORM,
+      displayOptions: { ...DEFAULT_DISPLAY_OPTIONS }
+    });
     setCoupons([]);
   }
 
@@ -177,20 +261,25 @@ export default function App() {
 
   async function loadGeneration(record) {
     setForm({
-      label: record.label,
+      label: record.label || "",
       batch: record.batch || "",
       exp: record.exp || "",
       price: record.price || "",
+      logoUrl: record.logoUrl || "",
+      theme: record.theme || "blue",
       menuName: record.menuName || "",
-      date: record.date,
-      quantity: record.quantity,
-      showCode: record.showCode !== undefined ? record.showCode : true,
-      showNumbering: record.showNumbering !== undefined ? record.showNumbering : true,
-      energy: record.nutrition.energy,
-      protein: record.nutrition.protein,
-      fat: record.nutrition.fat,
-      carbs: record.nutrition.carbs,
-      fiber: record.nutrition.fiber
+      date: record.date || "",
+      quantity: record.quantity || 10,
+      displayOptions: record.displayOptions ? { ...record.displayOptions } : {
+        ...DEFAULT_DISPLAY_OPTIONS,
+        showCode: record.showCode !== undefined ? record.showCode : true,
+        showNumbering: record.showNumbering !== undefined ? record.showNumbering : true
+      },
+      energy: record.nutrition?.energy || "",
+      protein: record.nutrition?.protein || "",
+      fat: record.nutrition?.fat || "",
+      carbs: record.nutrition?.carbs || "",
+      fiber: record.nutrition?.fiber || ""
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
     loadCouponsInChunks(record.coupons);
@@ -216,7 +305,7 @@ export default function App() {
           <div className="brand-icon"><Ticket size={22} /></div>
           <div>
             <h1>Label Generator</h1>
-            <p>Generate label konsumsi otomatis</p>
+            <p>Generate label informasi makanan otomatis</p>
           </div>
         </div>
         <div className="top-actions">
@@ -234,7 +323,7 @@ export default function App() {
           <div className="panel-title">
             <div>
               <h2>Input & Generate</h2>
-              <p>Isi data di bawah, lalu tentukan jumlah label yang akan dibuat.</p>
+              <p>Isi data atau kosongkan bagian yang tidak diperlukan, lalu tentukan opsi tampilan dan tema label.</p>
             </div>
           </div>
 
@@ -246,7 +335,6 @@ export default function App() {
                   value={form.label}
                   onChange={(e) => change("label", e.target.value)}
                   placeholder="Contoh: NAMA SPPG"
-                  required
                 />
               </label>
 
@@ -265,7 +353,6 @@ export default function App() {
                   type="date"
                   value={form.date}
                   onChange={(e) => change("date", e.target.value)}
-                  required
                 />
               </label>
 
@@ -299,6 +386,29 @@ export default function App() {
                 />
               </label>
 
+              <div className="field field-full logo-upload-field">
+                <span><ImageIcon size={14} style={{ display: "inline", marginRight: 4 }} /> Upload Logo Label (PNG / JPG)</span>
+                <div className="logo-upload-box">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoUpload}
+                    id="logo-file-input"
+                    className="file-input-hidden"
+                  />
+                  <label htmlFor="logo-file-input" className="btn secondary small">
+                    <Upload size={14} /> {form.logoUrl ? "Ganti Logo" : "Pilih File Logo"}
+                  </label>
+                  {form.logoUrl && (
+                    <div className="logo-preview-badge">
+                      <img src={form.logoUrl} alt="Preview Logo" />
+                      <span>Logo Terpasang</span>
+                      <button type="button" className="btn danger-outline small" onClick={removeLogo}>Hapus</button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <label className="field field-full">
                 <span>Nama Menu (Gunakan tombol Enter untuk membuat baris baru/daftar)</span>
                 <textarea
@@ -306,26 +416,145 @@ export default function App() {
                   onChange={(e) => change("menuName", e.target.value)}
                   placeholder="Contoh:&#10;1. Nasi Putih&#10;2. Ayam Goreng&#10;3. Buah Pisang"
                   rows={4}
-                  required
                 />
               </label>
+            </div>
 
-              <label className="checkbox-field field-full">
+            <div className="section-caption"><Palette size={16} style={{ display: "inline", marginRight: 6 }} /> Pilih Desain / Warna Label</div>
+
+            <div className="theme-selector-grid">
+              {THEMES.map((th) => (
+                <button
+                  type="button"
+                  key={th.id}
+                  className={`theme-badge ${form.theme === th.id ? "active" : ""}`}
+                  onClick={() => change("theme", th.id)}
+                >
+                  <span className="theme-dot" style={{ backgroundColor: th.color }}></span>
+                  {th.name}
+                </button>
+              ))}
+            </div>
+
+            <div className="section-caption-header">
+              <div className="section-caption">Opsi Tampilan Data pada Label</div>
+              <div className="master-toggle-buttons">
+                <button type="button" className="btn secondary small" onClick={checkAllDisplay}>
+                  <CheckSquare size={14} /> Centang Semua
+                </button>
+                <button type="button" className="btn secondary small" onClick={uncheckAllDisplay}>
+                  <Square size={14} /> Hapus Centang
+                </button>
+              </div>
+            </div>
+
+            <div className="checkbox-options-grid">
+              <label className="checkbox-item">
                 <input
                   type="checkbox"
-                  checked={form.showCode}
-                  onChange={(e) => change("showCode", e.target.checked)}
+                  checked={form.displayOptions?.showLogo !== false}
+                  onChange={(e) => toggleDisplay("showLogo", e.target.checked)}
+                />
+                <span>Tampilkan Logo</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showLabel !== false}
+                  onChange={(e) => toggleDisplay("showLabel", e.target.checked)}
+                />
+                <span>Tampilkan Nama SPPG</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showDate !== false}
+                  onChange={(e) => toggleDisplay("showDate", e.target.checked)}
+                />
+                <span>Tampilkan Tanggal Produksi</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showBatch !== false}
+                  onChange={(e) => toggleDisplay("showBatch", e.target.checked)}
+                />
+                <span>Tampilkan Batch Pengiriman</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showExp !== false}
+                  onChange={(e) => toggleDisplay("showExp", e.target.checked)}
+                />
+                <span>Tampilkan Tgl Exp / Kadaluarsa</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showPrice !== false}
+                  onChange={(e) => toggleDisplay("showPrice", e.target.checked)}
+                />
+                <span>Tampilkan Harga</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showMenu !== false}
+                  onChange={(e) => toggleDisplay("showMenu", e.target.checked)}
+                />
+                <span>Tampilkan Daftar Menu</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showNutrition !== false}
+                  onChange={(e) => toggleDisplay("showNutrition", e.target.checked)}
+                />
+                <span>Tampilkan Nilai Gizi</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showCode !== false}
+                  onChange={(e) => toggleDisplay("showCode", e.target.checked)}
                 />
                 <span>Tampilkan Kode Label & QR</span>
               </label>
 
-              <label className="checkbox-field field-full">
+              <label className="checkbox-item">
                 <input
                   type="checkbox"
-                  checked={form.showNumbering}
-                  onChange={(e) => change("showNumbering", e.target.checked)}
+                  checked={form.displayOptions?.showNumbering !== false}
+                  onChange={(e) => toggleDisplay("showNumbering", e.target.checked)}
                 />
-                <span>Tampilkan Penomoran Label</span>
+                <span>Tampilkan Penomoran Label (#000001)</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showFooterText !== false}
+                  onChange={(e) => toggleDisplay("showFooterText", e.target.checked)}
+                />
+                <span>Tampilkan Catatan Footer</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showFooterNumber === true}
+                  onChange={(e) => toggleDisplay("showFooterNumber", e.target.checked)}
+                />
+                <span>Tampilkan Nomor Urut Cetak (1, 2, 3...)</span>
               </label>
             </div>
 
@@ -392,8 +621,8 @@ export default function App() {
             {filteredHistory.length ? filteredHistory.map((item) => (
               <div className="history-item" key={item.id}>
                 <div>
-                  <strong>{item.label}{item.menuName ? ` - ${item.menuName}` : ""}</strong>
-                  <span>{formatDateID(item.date)} · {item.quantity.toLocaleString("id-ID")} label</span>
+                  <strong>{item.label || "Tanpa Judul"}{item.menuName ? ` - ${item.menuName}` : ""}</strong>
+                  <span>{item.date ? formatDateID(item.date) : "Tanpa Tanggal"} · {item.quantity.toLocaleString("id-ID")} label</span>
                 </div>
                 <div className="history-actions">
                   <button className="btn secondary small" onClick={() => loadGeneration(item)}>Buka</button>
