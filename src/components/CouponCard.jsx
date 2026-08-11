@@ -82,7 +82,22 @@ export default function CouponCard({ coupon, index }) {
             {disp.showMenu !== false && (
               <div className="coupon-menu-container">
                 <span className="coupon-menu-tag">MENU</span>
-                <div className="coupon-menu-name">{coupon.menuName || "-"}</div>
+                {coupon.menuItems && coupon.menuItems.length > 0 ? (
+                  <div className="coupon-menu-items-list">
+                    {coupon.menuItems.map((item, i) => (
+                      <div key={i} className="coupon-menu-item-line">
+                        <span className="coupon-menu-item-name">
+                          {i + 1}. {item.name}
+                        </span>
+                        {item.price && (
+                          <span className="coupon-menu-item-price">{item.price}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="coupon-menu-name">{coupon.menuName || "-"}</div>
+                )}
               </div>
             )}
 

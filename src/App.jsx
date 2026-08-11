@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search, Upload, CheckSquare, Square, Palette, Image as ImageIcon, Clock } from "lucide-react";
+import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search, Upload, CheckSquare, Square, Palette, Image as ImageIcon, Clock, Plus, X, List, AlignLeft } from "lucide-react";
 import CouponCard from "./components/CouponCard";
 import {
   clearGenerations,
@@ -26,6 +26,13 @@ const DEFAULT_DISPLAY_OPTIONS = {
   showFooterNumber: false
 };
 
+const DEFAULT_MENU_ITEMS = [
+  { name: "Nasi Putih Sehat", price: "Rp 5.000", checked: true },
+  { name: "Ayam Crispy Gurih", price: "Rp 12.000", checked: true },
+  { name: "Melon Segar", price: "Rp 3.000", checked: true },
+  { name: "Susu UHT", price: "Rp 4.000", checked: true }
+];
+
 const EMPTY_FORM = {
   label: "NAMA SPPG",
   batch: "Batch 01",
@@ -38,7 +45,9 @@ const EMPTY_FORM = {
   logoUrl: "",
   footerLogos: [],
   theme: "blue",
+  menuInputMode: "textarea",
   menuName: "1. Nasi Putih Sehat\n2. Ayam Crispy Gurih\n3. Melon Segar\n4. Susu UHT",
+  menuItems: DEFAULT_MENU_ITEMS.map((item) => ({ ...item })),
   date: new Date().toISOString().slice(0, 10),
   quantity: 10,
   displayOptions: { ...DEFAULT_DISPLAY_OPTIONS },
@@ -119,6 +128,55 @@ export default function App() {
         [key]: value
       }
     }));
+  }
+
+  // Menu Items helpers
+  function addMenuItem() {
+    setForm((prev) => ({
+      ...prev,
+      menuItems: [...(prev.menuItems || []), { name: "", price: "", checked: true }]
+    }));
+  }
+
+  function removeMenuItem(index) {
+    setForm((prev) => ({
+      ...prev,
+      menuItems: (prev.menuItems || []).filter((_, i) => i !== index)
+    }));
+  }
+
+  function updateMenuItem(index, field, value) {
+    setForm((prev) => {
+      const updated = [...(prev.menuItems || [])];
+      updated[index] = { ...updated[index], [field]: value };
+      return { ...prev, menuItems: updated };
+    });
+  }
+
+  function toggleAllMenuItems(checked) {
+    setForm((prev) => ({
+      ...prev,
+      menuItems: (prev.menuItems || []).map((item) => ({ ...item, checked }))
+    }));
+  }
+
+  function buildMenuNameFromItems(items) {
+    const checkedItems = (items || []).filter((item) => item.checked && item.name.trim());
+    return checkedItems
+      .map((item, i) => {
+        const line = `${i + 1}. ${item.name.trim()}`;
+        return item.price.trim() ? `${line} — ${item.price.trim()}` : line;
+      })
+      .join("\n");
+  }
+
+  function buildMenuItemsForCoupon(items) {
+    return (items || [])
+      .filter((item) => item.checked && item.name.trim())
+      .map((item) => ({
+        name: item.name.trim(),
+        price: item.price.trim()
+      }));
   }
 
   function checkAllDisplay() {
@@ -253,6 +311,14 @@ export default function App() {
 
     setLoading(true);
     try {
+      const isItemsMode = form.menuInputMode === "items";
+      const finalMenuName = isItemsMode
+        ? buildMenuNameFromItems(form.menuItems)
+        : (form.menuName || "").trim();
+      const finalMenuItems = isItemsMode
+        ? buildMenuItemsForCoupon(form.menuItems)
+        : [];
+
       const rawCoupons = generateCoupons({
         quantity,
         label: (form.label || "").trim(),
@@ -260,7 +326,8 @@ export default function App() {
         exp: expString,
         price: (form.price || "").trim(),
         notes: (form.notes || "").trim(),
-        menuName: (form.menuName || "").trim(),
+        menuName: finalMenuName,
+        menuItems: finalMenuItems,
         date: form.date || "",
         logoUrl: form.logoUrl || "",
         footerLogos: (form.footerLogos || []).filter(Boolean),
@@ -286,7 +353,9 @@ export default function App() {
         exp: expString,
         price: (form.price || "").trim(),
         notes: (form.notes || "").trim(),
-        menuName: (form.menuName || "").trim(),
+        menuName: finalMenuName,
+        menuInputMode: form.menuInputMode || "textarea",
+        menuItems: isItemsMode ? (form.menuItems || []).map((item) => ({ ...item })) : [],
         date: form.date || "",
         logoUrl: form.logoUrl || "",
         footerLogos: (form.footerLogos || []).filter(Boolean),
@@ -309,6 +378,7 @@ export default function App() {
   function resetForm() {
     setForm({
       ...EMPTY_FORM,
+      menuItems: DEFAULT_MENU_ITEMS.map((item) => ({ ...item })),
       displayOptions: { ...DEFAULT_DISPLAY_OPTIONS }
     });
     setCoupons([]);
@@ -335,7 +405,11 @@ export default function App() {
       logoUrl: record.logoUrl || "",
       footerLogos: record.footerLogos || [],
       theme: record.theme || "blue",
+      menuInputMode: record.menuInputMode || "textarea",
       menuName: record.menuName || "",
+      menuItems: record.menuItems && record.menuItems.length > 0
+        ? record.menuItems.map((item) => ({ ...item }))
+        : DEFAULT_MENU_ITEMS.map((item) => ({ ...item })),
       date: record.date || "",
       quantity: record.quantity || 10,
       displayOptions: record.displayOptions ? { ...record.displayOptions } : {
@@ -504,15 +578,109 @@ export default function App() {
                 </div>
               </div>
 
-              <label className="field field-full">
-                <span>Nama Menu (Gunakan tombol Enter untuk membuat baris baru/daftar)</span>
-                <textarea
-                  value={form.menuName}
-                  onChange={(e) => change("menuName", e.target.value)}
-                  placeholder="Contoh:&#10;1. Nasi Putih&#10;2. Ayam Goreng&#10;3. Buah Pisang"
-                  rows={4}
-                />
-              </label>
+              <div className="field field-full menu-input-section">
+                <div className="menu-input-header">
+                  <span>Nama Menu</span>
+                  <div className="menu-mode-toggle">
+                    <button
+                      type="button"
+                      className={`menu-mode-btn ${form.menuInputMode !== "items" ? "active" : ""}`}
+                      onClick={() => change("menuInputMode", "textarea")}
+                    >
+                      <AlignLeft size={13} /> Teks Bebas
+                    </button>
+                    <button
+                      type="button"
+                      className={`menu-mode-btn ${form.menuInputMode === "items" ? "active" : ""}`}
+                      onClick={() => change("menuInputMode", "items")}
+                    >
+                      <List size={13} /> Input Per Item
+                    </button>
+                  </div>
+                </div>
+
+                {form.menuInputMode !== "items" ? (
+                  <textarea
+                    value={form.menuName}
+                    onChange={(e) => change("menuName", e.target.value)}
+                    placeholder={"Contoh:\n1. Nasi Putih\n2. Ayam Goreng\n3. Buah Pisang"}
+                    rows={4}
+                  />
+                ) : (
+                  <div className="menu-items-container">
+                    <div className="menu-items-toolbar">
+                      <label className="menu-items-check-all">
+                        <input
+                          type="checkbox"
+                          checked={(form.menuItems || []).length > 0 && (form.menuItems || []).every((item) => item.checked)}
+                          onChange={(e) => toggleAllMenuItems(e.target.checked)}
+                        />
+                        <span>{(form.menuItems || []).filter((item) => item.checked).length}/{(form.menuItems || []).length} terpilih</span>
+                      </label>
+                      <button type="button" className="btn secondary small" onClick={addMenuItem}>
+                        <Plus size={14} /> Tambah Item
+                      </button>
+                    </div>
+
+                    <div className="menu-items-header-row">
+                      <div className="menu-items-col-check"></div>
+                      <div className="menu-items-col-no">No</div>
+                      <div className="menu-items-col-name">Nama Menu</div>
+                      <div className="menu-items-col-price">Harga</div>
+                      <div className="menu-items-col-action"></div>
+                    </div>
+
+                    {(form.menuItems || []).map((item, index) => (
+                      <div key={index} className={`menu-item-row ${!item.checked ? "unchecked" : ""}`}>
+                        <div className="menu-items-col-check">
+                          <input
+                            type="checkbox"
+                            checked={item.checked}
+                            onChange={(e) => updateMenuItem(index, "checked", e.target.checked)}
+                          />
+                        </div>
+                        <div className="menu-items-col-no">
+                          <span className="menu-item-number">{index + 1}</span>
+                        </div>
+                        <div className="menu-items-col-name">
+                          <input
+                            type="text"
+                            value={item.name}
+                            onChange={(e) => updateMenuItem(index, "name", e.target.value)}
+                            placeholder="Nama menu..."
+                            disabled={!item.checked}
+                          />
+                        </div>
+                        <div className="menu-items-col-price">
+                          <input
+                            type="text"
+                            value={item.price}
+                            onChange={(e) => updateMenuItem(index, "price", e.target.value)}
+                            placeholder="Rp 0"
+                            disabled={!item.checked}
+                          />
+                        </div>
+                        <div className="menu-items-col-action">
+                          <button
+                            type="button"
+                            className="menu-item-remove-btn"
+                            onClick={() => removeMenuItem(index)}
+                            title="Hapus item"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    {(form.menuItems || []).length === 0 && (
+                      <div className="menu-items-empty">
+                        Belum ada item menu. Klik <b>Tambah Item</b> untuk menambahkan.
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
               <label className="field field-full">
                 <span>Keterangan Lainnya / Catatan Khusus</span>
