@@ -11,6 +11,7 @@ export function randomCode(length = 10) {
 
 export function makeCoupon({
   index,
+  code: passedCode,
   label,
   menuName,
   menuItems,
@@ -25,7 +26,7 @@ export function makeCoupon({
   nutrition,
   displayOptions
 }) {
-  const code = randomCode(10);
+  const code = passedCode || randomCode(10);
   return {
     id: `${Date.now()}-${index}-${code}`,
     number: padNumber(index),
@@ -63,6 +64,7 @@ export function makeCoupon({
 
 export function generateCoupons({
   quantity,
+  code: userCode,
   label,
   menuName,
   menuItems,
@@ -77,9 +79,11 @@ export function generateCoupons({
   nutrition,
   displayOptions
 }) {
+  const batchCode = userCode || randomCode(10);
   return Array.from({ length: quantity }, (_, i) =>
     makeCoupon({
       index: i + 1,
+      code: batchCode,
       label,
       menuName,
       menuItems,
