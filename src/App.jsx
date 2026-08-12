@@ -26,6 +26,7 @@ const DEFAULT_DISPLAY_OPTIONS = {
   showFooterText: true,
   showFooterLogos: true,
   showFooterNumber: false,
+  resizeEnabled: false,
   labelWidth: 97,
   fontBase: 16
 };
@@ -232,6 +233,7 @@ export default function App() {
         showFooterText: true,
         showFooterLogos: true,
         showFooterNumber: true,
+        resizeEnabled: false,
         labelWidth: 97,
         fontBase: 16
       }
@@ -256,6 +258,7 @@ export default function App() {
         showFooterText: false,
         showFooterLogos: false,
         showFooterNumber: false,
+        resizeEnabled: false,
         labelWidth: 97,
         fontBase: 16
       }
@@ -794,36 +797,58 @@ export default function App() {
 
             <div className="section-caption"><Ruler size={16} style={{ display: "inline", marginRight: 6 }} /> Ukuran Label & Font</div>
 
-            <div className="size-control-grid">
-              <label className="field">
-                <span>Lebar Label (mm)</span>
+            <div className="resize-mode-box">
+              <label className="resize-mode-option">
                 <input
-                  type="number"
-                  min="30"
-                  max="200"
-                  step="1"
-                  value={form.displayOptions?.labelWidth ?? 105}
-                  onChange={(e) => changeDisplayNumber("labelWidth", e.target.value)}
-                  placeholder="Contoh: 105"
+                  type="checkbox"
+                  checked={form.displayOptions?.resizeEnabled === true}
+                  onChange={(e) => toggleDisplay("resizeEnabled", e.target.checked)}
                 />
+                <div>
+                  <strong>Gunakan Resize Ukuran &amp; Font</strong>
+                  <span>Nyalakan untuk mengatur lebar label (mm) dan ukuran font (px) secara dinamis.</span>
+                </div>
               </label>
-
-              <label className="field">
-                <span>Ukuran Font (px)</span>
-                <input
-                  type="number"
-                  min="8"
-                  max="28"
-                  step="1"
-                  value={form.displayOptions?.fontBase ?? 16}
-                  onChange={(e) => changeDisplayNumber("fontBase", e.target.value)}
-                  placeholder="Contoh: 16"
-                />
-              </label>
-              <div className="size-control-hint field-full">
-                Lebar memengaruhi jumlah kolom pada lembar cetak A4, semua teks label menyesuaikan ukuran font secara proporsional.
-              </div>
             </div>
+
+            {form.displayOptions?.resizeEnabled === true && (
+              <div className="size-control-grid">
+                <label className="field">
+                  <span>Lebar Label (mm)</span>
+                  <input
+                    type="number"
+                    min="30"
+                    max="200"
+                    step="1"
+                    value={form.displayOptions?.labelWidth ?? 97}
+                    onChange={(e) => changeDisplayNumber("labelWidth", e.target.value)}
+                    placeholder="Contoh: 97"
+                  />
+                </label>
+
+                <label className="field">
+                  <span>Ukuran Font (px)</span>
+                  <input
+                    type="number"
+                    min="8"
+                    max="28"
+                    step="1"
+                    value={form.displayOptions?.fontBase ?? 16}
+                    onChange={(e) => changeDisplayNumber("fontBase", e.target.value)}
+                    placeholder="Contoh: 16"
+                  />
+                </label>
+                <div className="size-control-hint field-full">
+                  Lebar memengaruhi jumlah kolom pada lembar cetak A4, semua teks label menyesuaikan ukuran font secara proporsional.
+                </div>
+              </div>
+            )}
+
+            {form.displayOptions?.resizeEnabled !== true && (
+              <div className="size-control-hint field-full resize-off-hint">
+                Mode default (tanpa resize): label mengikuti ukuran dan font standar 2 kolom A4.
+              </div>
+            )}
 
             <div className="section-caption-header">
               <div className="section-caption">Opsi Tampilan Data pada Label</div>
@@ -1041,7 +1066,11 @@ export default function App() {
 
         <section
           className="print-sheet"
-          style={{ "--label-w": `${form.displayOptions?.labelWidth || 105}mm` }}
+          style={
+            form.displayOptions?.resizeEnabled === true
+              ? { "--label-w": `${form.displayOptions.labelWidth || 97}mm` }
+              : undefined
+          }
         >
           {coupons.length ? coupons.map((coupon, i) => (
             <CouponCard key={coupon.id} coupon={coupon} index={i + 1} />

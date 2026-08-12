@@ -16,6 +16,7 @@ export default function CouponCard({ coupon, index }) {
     showFooterText: true,
     showFooterLogos: true,
     showFooterNumber: coupon.showFooterNumber === true,
+    resizeEnabled: false,
     fontBase: 16
   };
 
@@ -25,9 +26,10 @@ export default function CouponCard({ coupon, index }) {
 
   const hasFooter = disp.showFooterText !== false || disp.showFooterNumber;
 
-  const labelInlineVars = {
-    "--coupon-font": `${Number(disp.fontBase) || 16}px`
-  };
+  const labelInlineVars =
+    disp.resizeEnabled === true
+      ? { "--coupon-font": `${Number(disp.fontBase) || 16}px` }
+      : {};
 
   return (
     <article
