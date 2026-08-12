@@ -1048,9 +1048,61 @@ button:disabled { opacity: .55; cursor: not-allowed; }
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+  /* Blue Theme (Default) */
+  .coupon-card.theme-blue { background: linear-gradient(135deg, #eff6ff 0%, #ffffff 60%, #ffffff 100%) !important; border-color: #bfdbfe !important; }
+  .coupon-card.theme-blue .coupon-header { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important; border-color: #bfdbfe !important; }
+  .coupon-card.theme-blue .coupon-menu-tag, .coupon-card.theme-blue .nutrition-header-title { background: #dbeafe !important; color: #1e40af !important; }
+  .coupon-card.theme-blue .nutrition-col-val { color: #1e3a8a !important; }
+  .coupon-card.theme-blue .nutrition-header-row span.title { color: #1e40af !important; }
+  .coupon-card.theme-blue .coupon-menu-container { background: rgba(239, 246, 255, 0.8) !important; }
+  .coupon-card.theme-blue .nutrition-vertical-list { border-color: #bfdbfe !important; }
+  /* Emerald Theme */
+  .coupon-card.theme-emerald { background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 60%, #ffffff 100%) !important; border-color: #a7f3d0 !important; }
+  .coupon-card.theme-emerald .coupon-header { background: linear-gradient(135deg, #065f46 0%, #10b981 100%) !important; border-color: #a7f3d0 !important; }
+  .coupon-card.theme-emerald .coupon-title { color: #a7f3d0 !important; }
+  .coupon-card.theme-emerald .coupon-menu-tag, .coupon-card.theme-emerald .nutrition-header-title { background: #d1fae5 !important; color: #047857 !important; }
+  .coupon-card.theme-emerald .nutrition-col-val { color: #065f46 !important; }
+  .coupon-card.theme-emerald .nutrition-header-row span.title { color: #047857 !important; }
+  .coupon-card.theme-emerald .coupon-menu-container { background: rgba(236, 253, 245, 0.8) !important; }
+  .coupon-card.theme-emerald .nutrition-vertical-list { border-color: #a7f3d0 !important; }
+  /* Purple Theme */
+  .coupon-card.theme-purple { background: linear-gradient(135deg, #faf5ff 0%, #ffffff 60%, #ffffff 100%) !important; border-color: #ddd6fe !important; }
+  .coupon-card.theme-purple .coupon-header { background: linear-gradient(135deg, #581c87 0%, #8b5cf6 100%) !important; border-color: #ddd6fe !important; }
+  .coupon-card.theme-purple .coupon-title { color: #ddd6fe !important; }
+  .coupon-card.theme-purple .coupon-menu-tag, .coupon-card.theme-purple .nutrition-header-title { background: #f3e8ff !important; color: #6b21a8 !important; }
+  .coupon-card.theme-purple .nutrition-col-val { color: #7e22ce !important; }
+  .coupon-card.theme-purple .nutrition-header-row span.title { color: #6b21a8 !important; }
+  .coupon-card.theme-purple .coupon-menu-container { background: rgba(250, 240, 255, 0.8) !important; }
+  .coupon-card.theme-purple .nutrition-vertical-list { border-color: #ddd6fe !important; }
+  /* Amber Theme */
+  .coupon-card.theme-amber { background: linear-gradient(135deg, #fffbeb 0%, #ffffff 60%, #ffffff 100%) !important; border-color: #fde68a !important; }
+  .coupon-card.theme-amber .coupon-header { background: linear-gradient(135deg, #78350f 0%, #f59e0b 100%) !important; border-color: #fde68a !important; }
+  .coupon-card.theme-amber .coupon-title { color: #fde68a !important; }
+  .coupon-card.theme-amber .coupon-menu-tag, .coupon-card.theme-amber .nutrition-header-title { background: #fef3c7 !important; color: #92400e !important; }
+  .coupon-card.theme-amber .nutrition-col-val { color: #b45309 !important; }
+  .coupon-card.theme-amber .nutrition-header-row span.title { color: #92400e !important; }
+  .coupon-card.theme-amber .coupon-menu-container { background: rgba(255, 251, 235, 0.8) !important; }
+  .coupon-card.theme-amber .nutrition-vertical-list { border-color: #fde68a !important; }
+  /* Ruby Theme */
+  .coupon-card.theme-ruby { background: linear-gradient(135deg, #fff1f2 0%, #ffffff 60%, #ffffff 100%) !important; border-color: #fecdd3 !important; }
+  .coupon-card.theme-ruby .coupon-header { background: linear-gradient(135deg, #991b1b 0%, #ef4444 100%) !important; border-color: #fecdd3 !important; }
+  .coupon-card.theme-ruby .coupon-title { color: #fecdd3 !important; }
+  .coupon-card.theme-ruby .coupon-menu-tag, .coupon-card.theme-ruby .nutrition-header-title { background: #ffe4e6 !important; color: #9f1239 !important; }
+  .coupon-card.theme-ruby .nutrition-col-val { color: #be123c !important; }
+  .coupon-card.theme-ruby .nutrition-header-row span.title { color: #9f1239 !important; }
+  .coupon-card.theme-ruby .coupon-menu-container { background: rgba(255, 241, 242, 0.8) !important; }
+  .coupon-card.theme-ruby .nutrition-vertical-list { border-color: #fecdd3 !important; }
+  /* Monochrome Theme */
+  .coupon-card.theme-monochrome { background: linear-gradient(135deg, #f4f4f5 0%, #ffffff 60%, #ffffff 100%) !important; border-color: #e4e4e7 !important; }
+  .coupon-card.theme-monochrome .coupon-header { background: linear-gradient(135deg, #18181b 0%, #52525b 100%) !important; border-color: #e4e4e7 !important; }
+  .coupon-card.theme-monochrome .coupon-title { color: #e4e4e7 !important; }
+  .coupon-card.theme-monochrome .coupon-menu-tag, .coupon-card.theme-monochrome .nutrition-header-title { background: #e4e4e7 !important; color: #27272a !important; }
+  .coupon-card.theme-monochrome .nutrition-col-val { color: #3f3f46 !important; }
+  .coupon-card.theme-monochrome .nutrition-header-row span.title { color: #27272a !important; }
+  .coupon-card.theme-monochrome .coupon-menu-container { background: rgba(244, 244, 245, 0.8) !important; }
+  .coupon-card.theme-monochrome .nutrition-vertical-list { border-color: #e4e4e7 !important; }
   .coupon-header {
     padding: 1.8mm 2.5mm;
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
     color: #fff !important;
     border-bottom: .2mm dashed #bfdbfe;
     -webkit-print-color-adjust: exact;
@@ -1058,7 +1110,7 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   }
   .coupon-logo-img { max-width: 6.5mm; max-height: 6.5mm; border-radius: 0.6mm; padding: 0.3mm; background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .coupon-label { font-size: 8.5pt; color: #fff !important; }
-  .coupon-title { font-size: 5pt; color: #bfdbfe !important; }
+  .coupon-title { font-size: 5pt; }
   .coupon-number { font-size: 7.5pt; color: #fff !important; background: rgba(255,255,255,0.2) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .coupon-header-right { display: flex; align-items: center; gap: 1.2mm; flex-shrink: 0; }
   .coupon-header-extra-logos { display: flex; align-items: center; gap: 0.8mm; }
@@ -1219,29 +1271,51 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   }
   .coupon-footer-left { display: flex; align-items: center; gap: 1.5mm; flex: 1; min-width: 0; }
 
-  /* Resize mode untuk cetak: ukuran teks & QR dinamis mengikuti --coupon-font */
-  .print-sheet[style*="--label-w"] .coupon-card { font-size: var(--coupon-font, 16px); }
+  /* Resize mode untuk cetak: ukuran teks, jarak, tinggi card & QR dinamis mengikuti --label-w / --coupon-font */
+  .print-sheet[style*="--label-w"] {
+    --label-h: calc(var(--label-w) * 0.72);
+  }
+  .print-sheet[style*="--label-w"] .coupon-card {
+    font-size: var(--coupon-font, 16px);
+    min-height: 0;
+    max-height: var(--label-h);
+  }
+  /* Rantai flex diresize: semua level boleh menyusut & memotong, supaya teks tidak menimpa footer/code-row */
+  .print-sheet[style*="--label-w"] .coupon-body,
+  .print-sheet[style*="--label-w"] .coupon-main-content,
+  .print-sheet[style*="--label-w"] .coupon-left-col,
+  .print-sheet[style*="--label-w"] .coupon-menu-container,
+  .print-sheet[style*="--label-w"] .coupon-menu-items-list {
+    min-height: 0;
+    overflow: hidden;
+  }
+  .print-sheet[style*="--label-w"] .coupon-header { padding: 0.22em 0.32em; }
+  .print-sheet[style*="--label-w"] .coupon-body { padding: 0.18em 0.32em; }
+  .print-sheet[style*="--label-w"] .coupon-main-content { gap: 0.22em; }
+  .print-sheet[style*="--label-w"] .coupon-left-col { gap: 0.12em; }
   .print-sheet[style*="--label-w"] .coupon-logo-img,
   .print-sheet[style*="--label-w"] .coupon-header-extra-logo-img { max-width: 2em; max-height: 2em; }
   .print-sheet[style*="--label-w"] .coupon-label { font-size: 0.8125em; }
   .print-sheet[style*="--label-w"] .coupon-title { font-size: 0.5625em; }
   .print-sheet[style*="--label-w"] .coupon-number { font-size: 0.8125em; }
-  .print-sheet[style*="--label-w"] .coupon-menu-tag { font-size: 0.47em; }
+  .print-sheet[style*="--label-w"] .coupon-menu-container { padding: 0.11em 0.17em; gap: 0.05em; }
+  .print-sheet[style*="--label-w"] .coupon-menu-tag { font-size: 0.47em; padding: 0.02em 0.09em; margin-bottom: 0.05em; }
   .print-sheet[style*="--label-w"] .coupon-menu-name { font-size: 0.72em; }
-  .print-sheet[style*="--label-w"] .coupon-menu-item-line { font-size: 0.6875em; }
+  .print-sheet[style*="--label-w"] .coupon-menu-item-line { font-size: 0.6875em; gap: 0.18em; line-height: 1.1; }
   .print-sheet[style*="--label-w"] .coupon-menu-item-price { font-size: 0.91em; }
   .print-sheet[style*="--label-w"] .coupon-date,
-  .print-sheet[style*="--label-w"] .coupon-batch { font-size: 0.53em; }
+  .print-sheet[style*="--label-w"] .coupon-batch { font-size: 0.53em; padding: 0.08em 0.1em; }
   .print-sheet[style*="--label-w"] .coupon-date span,
   .print-sheet[style*="--label-w"] .coupon-batch span { font-size: 1em; }
   .print-sheet[style*="--label-w"] .coupon-date strong,
   .print-sheet[style*="--label-w"] .coupon-batch strong { font-size: 1.12em; }
   .print-sheet[style*="--label-w"] .coupon-exp,
-  .print-sheet[style*="--label-w"] .coupon-price { font-size: 0.5em; }
+  .print-sheet[style*="--label-w"] .coupon-price { font-size: 0.5em; padding: 0.06em 0.09em; }
   .print-sheet[style*="--label-w"] .coupon-exp span,
   .print-sheet[style*="--label-w"] .coupon-price span { font-size: 1em; }
   .print-sheet[style*="--label-w"] .coupon-exp strong,
   .print-sheet[style*="--label-w"] .coupon-price strong { font-size: 1.06em; }
+  .print-sheet[style*="--label-w"] .coupon-notes-container { padding: 0.06em 0.1em; margin-top: 0.06em; }
   .print-sheet[style*="--label-w"] .coupon-notes-tag { font-size: 0.44em; }
   .print-sheet[style*="--label-w"] .coupon-notes-text { font-size: 0.59em; }
   .print-sheet[style*="--label-w"] .nutrition-header-title { font-size: 0.5em; }
@@ -1249,8 +1323,9 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   .print-sheet[style*="--label-w"] .nutrition-col-name { font-size: 0.47em; }
   .print-sheet[style*="--label-w"] .nutrition-col-val { font-size: 0.5em; }
   .print-sheet[style*="--label-w"] .nutrition-col-val small { font-size: 0.81em; }
+  .print-sheet[style*="--label-w"] .coupon-code-row { margin-top: 0.1em; padding-top: 0.09em; }
   .print-sheet[style*="--label-w"] .coupon-code-row small { font-size: 0.44em; }
   .print-sheet[style*="--label-w"] .coupon-code-row strong { font-size: 0.75em; }
   .print-sheet[style*="--label-w"] .coupon-qr { width: 2.38em; height: 2.38em; }
-  .print-sheet[style*="--label-w"] .coupon-footer { font-size: 0.44em; }
+  .print-sheet[style*="--label-w"] .coupon-footer { font-size: 0.44em; padding: 0.08em 0.32em; }
 }
