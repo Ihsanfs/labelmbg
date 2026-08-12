@@ -1,4 +1,5 @@
 import React from "react";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function CouponCard({ coupon, index }) {
   const disp = coupon.displayOptions || {
@@ -183,10 +184,15 @@ export default function CouponCard({ coupon, index }) {
               <small>KODE LABEL</small>
               <strong>{coupon.code}</strong>
             </div>
-            <div className="fake-qr" aria-label="QR placeholder">
-              <span>{coupon.code.slice(0, 4)}</span>
-              <span>{coupon.code.slice(4, 8)}</span>
-              <span>{coupon.code.slice(8)}</span>
+            <div className="coupon-qr" aria-label={`QR code ${coupon.code}`}>
+              <QRCodeSVG
+                value={coupon.code}
+                size={1}
+                level="M"
+                margin={0}
+                bgColor="#ffffff"
+                fgColor="#0f172a"
+              />
             </div>
           </div>
         )}
