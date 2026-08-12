@@ -130,25 +130,35 @@ export default function CouponCard({ coupon, index }) {
             <div className="coupon-right-col">
               <span className="nutrition-header-title">NILAI GIZI</span>
               <div className="nutrition-vertical-list">
-                <div className="nutrition-item">
-                  <span>Energi</span>
-                  <b>{coupon.nutrition?.energy || "0"} kcal</b>
+                <div className="nutrition-header-row">
+                  <span className="nutrition-col-name">Gizi</span>
+                  <span className="nutrition-col-val title">Besar</span>
+                  <span className="nutrition-col-val title">Kecil</span>
                 </div>
                 <div className="nutrition-item">
-                  <span>Protein</span>
-                  <b>{coupon.nutrition?.protein || "0"} g</b>
+                  <span className="nutrition-col-name">Energi</span>
+                  <b className="nutrition-col-val">{coupon.nutrition?.large?.energy || coupon.nutrition?.energy || "0"} <small>kcal</small></b>
+                  <b className="nutrition-col-val">{coupon.nutrition?.small?.energy || "0"} <small>kcal</small></b>
                 </div>
                 <div className="nutrition-item">
-                  <span>Lemak</span>
-                  <b>{coupon.nutrition?.fat || "0"} g</b>
+                  <span className="nutrition-col-name">Protein</span>
+                  <b className="nutrition-col-val">{coupon.nutrition?.large?.protein || coupon.nutrition?.protein || "0"} <small>g</small></b>
+                  <b className="nutrition-col-val">{coupon.nutrition?.small?.protein || "0"} <small>g</small></b>
                 </div>
                 <div className="nutrition-item">
-                  <span>Karbohidrat</span>
-                  <b>{coupon.nutrition?.carbs || "0"} g</b>
+                  <span className="nutrition-col-name">Lemak</span>
+                  <b className="nutrition-col-val">{coupon.nutrition?.large?.fat || coupon.nutrition?.fat || "0"} <small>g</small></b>
+                  <b className="nutrition-col-val">{coupon.nutrition?.small?.fat || "0"} <small>g</small></b>
                 </div>
                 <div className="nutrition-item">
-                  <span>Serat</span>
-                  <b>{coupon.nutrition?.fiber || "0"} g</b>
+                  <span className="nutrition-col-name">Karbo</span>
+                  <b className="nutrition-col-val">{coupon.nutrition?.large?.carbs || coupon.nutrition?.carbs || "0"} <small>g</small></b>
+                  <b className="nutrition-col-val">{coupon.nutrition?.small?.carbs || "0"} <small>g</small></b>
+                </div>
+                <div className="nutrition-item">
+                  <span className="nutrition-col-name">Serat</span>
+                  <b className="nutrition-col-val">{coupon.nutrition?.large?.fiber || coupon.nutrition?.fiber || "0"} <small>g</small></b>
+                  <b className="nutrition-col-val">{coupon.nutrition?.small?.fiber || "0"} <small>g</small></b>
                 </div>
               </div>
             </div>

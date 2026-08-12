@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search, Upload, CheckSquare, Square, Palette, Image as ImageIcon, Clock, Plus, X, List, AlignLeft } from "lucide-react";
+import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search, Upload, CheckSquare, Square, Palette, Image as ImageIcon, Clock, Plus, X, List, AlignLeft, Activity } from "lucide-react";
 import CouponCard from "./components/CouponCard";
 import {
   clearGenerations,
@@ -51,11 +51,16 @@ const EMPTY_FORM = {
   date: new Date().toISOString().slice(0, 10),
   quantity: 10,
   displayOptions: { ...DEFAULT_DISPLAY_OPTIONS },
-  energy: "",
-  protein: "",
-  fat: "",
-  carbs: "",
-  fiber: ""
+  energy: "450",
+  protein: "20",
+  fat: "15",
+  carbs: "60",
+  fiber: "8",
+  energySmall: "250",
+  proteinSmall: "12",
+  fatSmall: "8",
+  carbsSmall: "35",
+  fiberSmall: "4"
 };
 
 const THEMES = [
@@ -69,6 +74,20 @@ const THEMES = [
 
 function normalizeNutrition(form) {
   return {
+    large: {
+      energy: form.energy || "0",
+      protein: form.protein || "0",
+      fat: form.fat || "0",
+      carbs: form.carbs || "0",
+      fiber: form.fiber || "0"
+    },
+    small: {
+      energy: form.energySmall || "0",
+      protein: form.proteinSmall || "0",
+      fat: form.fatSmall || "0",
+      carbs: form.carbsSmall || "0",
+      fiber: form.fiberSmall || "0"
+    },
     energy: form.energy || "0",
     protein: form.protein || "0",
     fat: form.fat || "0",
@@ -417,11 +436,16 @@ export default function App() {
         showCode: record.showCode !== undefined ? record.showCode : true,
         showNumbering: record.showNumbering !== undefined ? record.showNumbering : true
       },
-      energy: record.nutrition?.energy || "",
-      protein: record.nutrition?.protein || "",
-      fat: record.nutrition?.fat || "",
-      carbs: record.nutrition?.carbs || "",
-      fiber: record.nutrition?.fiber || ""
+      energy: record.nutrition?.large?.energy || record.nutrition?.energy || "",
+      protein: record.nutrition?.large?.protein || record.nutrition?.protein || "",
+      fat: record.nutrition?.large?.fat || record.nutrition?.fat || "",
+      carbs: record.nutrition?.large?.carbs || record.nutrition?.carbs || "",
+      fiber: record.nutrition?.large?.fiber || record.nutrition?.fiber || "",
+      energySmall: record.nutrition?.small?.energy || "",
+      proteinSmall: record.nutrition?.small?.protein || "",
+      fatSmall: record.nutrition?.small?.fat || "",
+      carbsSmall: record.nutrition?.small?.carbs || "",
+      fiberSmall: record.nutrition?.small?.fiber || ""
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
     loadCouponsInChunks(record.coupons);
@@ -889,14 +913,34 @@ export default function App() {
             </div>
 
 
-            <div className="section-caption">Informasi Nilai Gizi</div>
+            <div className="section-caption"><Activity size={16} style={{ display: "inline", marginRight: 6 }} /> Informasi Nilai Gizi</div>
 
-            <div className="nutrition-inputs">
-              <label className="field"><span>Energi (kcal)</span><input type="number" min="0" step="0.01" value={form.energy} onChange={(e) => change("energy", e.target.value)} placeholder="Contoh: 450" /></label>
-              <label className="field"><span>Protein (g)</span><input type="number" min="0" step="0.01" value={form.protein} onChange={(e) => change("protein", e.target.value)} placeholder="Contoh: 20" /></label>
-              <label className="field"><span>Lemak (g)</span><input type="number" min="0" step="0.01" value={form.fat} onChange={(e) => change("fat", e.target.value)} placeholder="Contoh: 15" /></label>
-              <label className="field"><span>Karbohidrat (g)</span><input type="number" min="0" step="0.01" value={form.carbs} onChange={(e) => change("carbs", e.target.value)} placeholder="Contoh: 60" /></label>
-              <label className="field"><span>Serat (g)</span><input type="number" min="0" step="0.01" value={form.fiber} onChange={(e) => change("fiber", e.target.value)} placeholder="Contoh: 8" /></label>
+            <div className="nutrition-section-container">
+              <div className="nutrition-group-box">
+                <div className="nutrition-group-header">
+                  <span className="portion-badge large">Porsi Besar</span>
+                </div>
+                <div className="nutrition-inputs">
+                  <label className="field"><span>Energi (kcal)</span><input type="number" min="0" step="0.01" value={form.energy} onChange={(e) => change("energy", e.target.value)} placeholder="Contoh: 450" /></label>
+                  <label className="field"><span>Protein (g)</span><input type="number" min="0" step="0.01" value={form.protein} onChange={(e) => change("protein", e.target.value)} placeholder="Contoh: 20" /></label>
+                  <label className="field"><span>Lemak (g)</span><input type="number" min="0" step="0.01" value={form.fat} onChange={(e) => change("fat", e.target.value)} placeholder="Contoh: 15" /></label>
+                  <label className="field"><span>Karbohidrat (g)</span><input type="number" min="0" step="0.01" value={form.carbs} onChange={(e) => change("carbs", e.target.value)} placeholder="Contoh: 60" /></label>
+                  <label className="field"><span>Serat (g)</span><input type="number" min="0" step="0.01" value={form.fiber} onChange={(e) => change("fiber", e.target.value)} placeholder="Contoh: 8" /></label>
+                </div>
+              </div>
+
+              <div className="nutrition-group-box">
+                <div className="nutrition-group-header">
+                  <span className="portion-badge small">Porsi Kecil</span>
+                </div>
+                <div className="nutrition-inputs">
+                  <label className="field"><span>Energi (kcal)</span><input type="number" min="0" step="0.01" value={form.energySmall} onChange={(e) => change("energySmall", e.target.value)} placeholder="Contoh: 250" /></label>
+                  <label className="field"><span>Protein (g)</span><input type="number" min="0" step="0.01" value={form.proteinSmall} onChange={(e) => change("proteinSmall", e.target.value)} placeholder="Contoh: 12" /></label>
+                  <label className="field"><span>Lemak (g)</span><input type="number" min="0" step="0.01" value={form.fatSmall} onChange={(e) => change("fatSmall", e.target.value)} placeholder="Contoh: 8" /></label>
+                  <label className="field"><span>Karbohidrat (g)</span><input type="number" min="0" step="0.01" value={form.carbsSmall} onChange={(e) => change("carbsSmall", e.target.value)} placeholder="Contoh: 35" /></label>
+                  <label className="field"><span>Serat (g)</span><input type="number" min="0" step="0.01" value={form.fiberSmall} onChange={(e) => change("fiberSmall", e.target.value)} placeholder="Contoh: 4" /></label>
+                </div>
+              </div>
             </div>
 
             <div className="generate-bar">
