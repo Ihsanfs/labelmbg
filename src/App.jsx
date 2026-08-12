@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search, Upload, CheckSquare, Square, Palette, Image as ImageIcon, Clock, Plus, X, List, AlignLeft, Activity } from "lucide-react";
+import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search, Upload, CheckSquare, Square, Palette, Image as ImageIcon, Clock, Plus, X, List, AlignLeft, Activity, Ruler } from "lucide-react";
 import CouponCard from "./components/CouponCard";
 import {
   clearGenerations,
@@ -25,7 +25,9 @@ const DEFAULT_DISPLAY_OPTIONS = {
   showNumbering: true,
   showFooterText: true,
   showFooterLogos: true,
-  showFooterNumber: false
+  showFooterNumber: false,
+  labelWidth: 97,
+  fontBase: 16
 };
 
 const DEFAULT_MENU_ITEMS = [
@@ -151,6 +153,18 @@ export default function App() {
     }));
   }
 
+  function changeDisplayNumber(name, value) {
+    let num = Number(value);
+    if (!Number.isFinite(num) || num <= 0) num = DEFAULT_DISPLAY_OPTIONS[name];
+    setForm((prev) => ({
+      ...prev,
+      displayOptions: {
+        ...prev.displayOptions,
+        [name]: num
+      }
+    }));
+  }
+
   // Menu Items helpers
   function addMenuItem() {
     setForm((prev) => ({
@@ -217,7 +231,9 @@ export default function App() {
         showNumbering: true,
         showFooterText: true,
         showFooterLogos: true,
-        showFooterNumber: true
+        showFooterNumber: true,
+        labelWidth: 97,
+        fontBase: 16
       }
     }));
   }
@@ -239,7 +255,9 @@ export default function App() {
         showNumbering: false,
         showFooterText: false,
         showFooterLogos: false,
-        showFooterNumber: false
+        showFooterNumber: false,
+        labelWidth: 97,
+        fontBase: 16
       }
     }));
   }
@@ -774,6 +792,39 @@ export default function App() {
               ))}
             </div>
 
+            <div className="section-caption"><Ruler size={16} style={{ display: "inline", marginRight: 6 }} /> Ukuran Label & Font</div>
+
+            <div className="size-control-grid">
+              <label className="field">
+                <span>Lebar Label (mm)</span>
+                <input
+                  type="number"
+                  min="30"
+                  max="200"
+                  step="1"
+                  value={form.displayOptions?.labelWidth ?? 105}
+                  onChange={(e) => changeDisplayNumber("labelWidth", e.target.value)}
+                  placeholder="Contoh: 105"
+                />
+              </label>
+
+              <label className="field">
+                <span>Ukuran Font (px)</span>
+                <input
+                  type="number"
+                  min="8"
+                  max="28"
+                  step="1"
+                  value={form.displayOptions?.fontBase ?? 16}
+                  onChange={(e) => changeDisplayNumber("fontBase", e.target.value)}
+                  placeholder="Contoh: 16"
+                />
+              </label>
+              <div className="size-control-hint field-full">
+                Lebar memengaruhi jumlah kolom pada lembar cetak A4, semua teks label menyesuaikan ukuran font secara proporsional.
+              </div>
+            </div>
+
             <div className="section-caption-header">
               <div className="section-caption">Opsi Tampilan Data pada Label</div>
               <div className="master-toggle-buttons">
@@ -988,7 +1039,10 @@ export default function App() {
           )}
         </section>
 
-        <section className="print-sheet">
+        <section
+          className="print-sheet"
+          style={{ "--label-w": `${form.displayOptions?.labelWidth || 105}mm` }}
+        >
           {coupons.length ? coupons.map((coupon, i) => (
             <CouponCard key={coupon.id} coupon={coupon} index={i + 1} />
           )) : (

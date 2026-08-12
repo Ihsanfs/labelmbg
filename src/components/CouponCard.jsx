@@ -14,7 +14,8 @@ export default function CouponCard({ coupon, index }) {
     showNumbering: coupon.showNumbering !== false,
     showFooterText: true,
     showFooterLogos: true,
-    showFooterNumber: coupon.showFooterNumber === true
+    showFooterNumber: coupon.showFooterNumber === true,
+    fontBase: 16
   };
 
   const themeClass = `theme-${coupon.theme || "blue"}`;
@@ -23,8 +24,15 @@ export default function CouponCard({ coupon, index }) {
 
   const hasFooter = disp.showFooterText !== false || disp.showFooterNumber;
 
+  const labelInlineVars = {
+    "--coupon-font": `${Number(disp.fontBase) || 16}px`
+  };
+
   return (
-    <article className={`coupon-card ${themeClass}`}>
+    <article
+      className={`coupon-card ${themeClass}`}
+      style={labelInlineVars}
+    >
       <div className="coupon-header">
         {/* Left: main logo + label text */}
         <div className="coupon-header-brand">
