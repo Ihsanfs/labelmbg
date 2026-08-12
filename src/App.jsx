@@ -19,6 +19,8 @@ const DEFAULT_DISPLAY_OPTIONS = {
   showNotes: true,
   showMenu: true,
   showNutrition: true,
+  showNutritionLarge: true,
+  showNutritionSmall: true,
   showCode: true,
   showNumbering: true,
   showFooterText: true,
@@ -471,7 +473,7 @@ export default function App() {
           <div className="brand-icon"><Ticket size={22} /></div>
           <div>
             <h1>Label Generator</h1>
-            <p>Generate label informasi makanan otomatis</p>
+            <p>Generate label informasi makanan otomatis · Dev by: IFS dev</p>
           </div>
         </div>
         <div className="top-actions">
@@ -916,30 +918,50 @@ export default function App() {
             <div className="section-caption"><Activity size={16} style={{ display: "inline", marginRight: 6 }} /> Informasi Nilai Gizi</div>
 
             <div className="nutrition-section-container">
-              <div className="nutrition-group-box">
+              <div className={`nutrition-group-box ${form.displayOptions?.showNutritionLarge === false ? "nutrition-group-box--disabled" : ""}`}>
                 <div className="nutrition-group-header">
-                  <span className="portion-badge large">Porsi Besar</span>
+                  <label className="nutrition-portion-toggle">
+                    <input
+                      type="checkbox"
+                      checked={form.displayOptions?.showNutritionLarge !== false}
+                      onChange={(e) => toggleDisplay("showNutritionLarge", e.target.checked)}
+                    />
+                    <span className="portion-badge large">Porsi Besar</span>
+                  </label>
+                  <span className="portion-toggle-hint">{form.displayOptions?.showNutritionLarge !== false ? "Ditampilkan di label" : "Disembunyikan"}</span>
                 </div>
-                <div className="nutrition-inputs">
-                  <label className="field"><span>Energi (kcal)</span><input type="number" min="0" step="0.01" value={form.energy} onChange={(e) => change("energy", e.target.value)} placeholder="Contoh: 450" /></label>
-                  <label className="field"><span>Protein (g)</span><input type="number" min="0" step="0.01" value={form.protein} onChange={(e) => change("protein", e.target.value)} placeholder="Contoh: 20" /></label>
-                  <label className="field"><span>Lemak (g)</span><input type="number" min="0" step="0.01" value={form.fat} onChange={(e) => change("fat", e.target.value)} placeholder="Contoh: 15" /></label>
-                  <label className="field"><span>Karbohidrat (g)</span><input type="number" min="0" step="0.01" value={form.carbs} onChange={(e) => change("carbs", e.target.value)} placeholder="Contoh: 60" /></label>
-                  <label className="field"><span>Serat (g)</span><input type="number" min="0" step="0.01" value={form.fiber} onChange={(e) => change("fiber", e.target.value)} placeholder="Contoh: 8" /></label>
-                </div>
+                {form.displayOptions?.showNutritionLarge !== false && (
+                  <div className="nutrition-inputs">
+                    <label className="field"><span>Energi (kcal)</span><input type="number" min="0" step="0.01" value={form.energy} onChange={(e) => change("energy", e.target.value)} placeholder="Contoh: 450" /></label>
+                    <label className="field"><span>Protein (g)</span><input type="number" min="0" step="0.01" value={form.protein} onChange={(e) => change("protein", e.target.value)} placeholder="Contoh: 20" /></label>
+                    <label className="field"><span>Lemak (g)</span><input type="number" min="0" step="0.01" value={form.fat} onChange={(e) => change("fat", e.target.value)} placeholder="Contoh: 15" /></label>
+                    <label className="field"><span>Karbohidrat (g)</span><input type="number" min="0" step="0.01" value={form.carbs} onChange={(e) => change("carbs", e.target.value)} placeholder="Contoh: 60" /></label>
+                    <label className="field"><span>Serat (g)</span><input type="number" min="0" step="0.01" value={form.fiber} onChange={(e) => change("fiber", e.target.value)} placeholder="Contoh: 8" /></label>
+                  </div>
+                )}
               </div>
 
-              <div className="nutrition-group-box">
+              <div className={`nutrition-group-box ${form.displayOptions?.showNutritionSmall === false ? "nutrition-group-box--disabled" : ""}`}>
                 <div className="nutrition-group-header">
-                  <span className="portion-badge small">Porsi Kecil</span>
+                  <label className="nutrition-portion-toggle">
+                    <input
+                      type="checkbox"
+                      checked={form.displayOptions?.showNutritionSmall !== false}
+                      onChange={(e) => toggleDisplay("showNutritionSmall", e.target.checked)}
+                    />
+                    <span className="portion-badge small">Porsi Kecil</span>
+                  </label>
+                  <span className="portion-toggle-hint">{form.displayOptions?.showNutritionSmall !== false ? "Ditampilkan di label" : "Disembunyikan"}</span>
                 </div>
-                <div className="nutrition-inputs">
-                  <label className="field"><span>Energi (kcal)</span><input type="number" min="0" step="0.01" value={form.energySmall} onChange={(e) => change("energySmall", e.target.value)} placeholder="Contoh: 250" /></label>
-                  <label className="field"><span>Protein (g)</span><input type="number" min="0" step="0.01" value={form.proteinSmall} onChange={(e) => change("proteinSmall", e.target.value)} placeholder="Contoh: 12" /></label>
-                  <label className="field"><span>Lemak (g)</span><input type="number" min="0" step="0.01" value={form.fatSmall} onChange={(e) => change("fatSmall", e.target.value)} placeholder="Contoh: 8" /></label>
-                  <label className="field"><span>Karbohidrat (g)</span><input type="number" min="0" step="0.01" value={form.carbsSmall} onChange={(e) => change("carbsSmall", e.target.value)} placeholder="Contoh: 35" /></label>
-                  <label className="field"><span>Serat (g)</span><input type="number" min="0" step="0.01" value={form.fiberSmall} onChange={(e) => change("fiberSmall", e.target.value)} placeholder="Contoh: 4" /></label>
-                </div>
+                {form.displayOptions?.showNutritionSmall !== false && (
+                  <div className="nutrition-inputs">
+                    <label className="field"><span>Energi (kcal)</span><input type="number" min="0" step="0.01" value={form.energySmall} onChange={(e) => change("energySmall", e.target.value)} placeholder="Contoh: 250" /></label>
+                    <label className="field"><span>Protein (g)</span><input type="number" min="0" step="0.01" value={form.proteinSmall} onChange={(e) => change("proteinSmall", e.target.value)} placeholder="Contoh: 12" /></label>
+                    <label className="field"><span>Lemak (g)</span><input type="number" min="0" step="0.01" value={form.fatSmall} onChange={(e) => change("fatSmall", e.target.value)} placeholder="Contoh: 8" /></label>
+                    <label className="field"><span>Karbohidrat (g)</span><input type="number" min="0" step="0.01" value={form.carbsSmall} onChange={(e) => change("carbsSmall", e.target.value)} placeholder="Contoh: 35" /></label>
+                    <label className="field"><span>Serat (g)</span><input type="number" min="0" step="0.01" value={form.fiberSmall} onChange={(e) => change("fiberSmall", e.target.value)} placeholder="Contoh: 4" /></label>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -1022,6 +1044,9 @@ export default function App() {
           </div>
         </div>
       )}
+      <footer className="app-footer no-print">
+        <p>© {new Date().getFullYear()} Generator Label Makanan · Dev by: <strong>IFS dev</strong></p>
+      </footer>
     </div>
   );
 }

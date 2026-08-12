@@ -126,43 +126,47 @@ export default function CouponCard({ coupon, index }) {
             )}
           </div>
 
-          {disp.showNutrition !== false && (
-            <div className="coupon-right-col">
-              <span className="nutrition-header-title">NILAI GIZI</span>
-              <div className="nutrition-vertical-list">
-                <div className="nutrition-header-row">
-                  <span className="nutrition-col-name">Gizi</span>
-                  <span className="nutrition-col-val title">Besar</span>
-                  <span className="nutrition-col-val title">Kecil</span>
-                </div>
-                <div className="nutrition-item">
-                  <span className="nutrition-col-name">Energi</span>
-                  <b className="nutrition-col-val">{coupon.nutrition?.large?.energy || coupon.nutrition?.energy || "0"} <small>kcal</small></b>
-                  <b className="nutrition-col-val">{coupon.nutrition?.small?.energy || "0"} <small>kcal</small></b>
-                </div>
-                <div className="nutrition-item">
-                  <span className="nutrition-col-name">Protein</span>
-                  <b className="nutrition-col-val">{coupon.nutrition?.large?.protein || coupon.nutrition?.protein || "0"} <small>g</small></b>
-                  <b className="nutrition-col-val">{coupon.nutrition?.small?.protein || "0"} <small>g</small></b>
-                </div>
-                <div className="nutrition-item">
-                  <span className="nutrition-col-name">Lemak</span>
-                  <b className="nutrition-col-val">{coupon.nutrition?.large?.fat || coupon.nutrition?.fat || "0"} <small>g</small></b>
-                  <b className="nutrition-col-val">{coupon.nutrition?.small?.fat || "0"} <small>g</small></b>
-                </div>
-                <div className="nutrition-item">
-                  <span className="nutrition-col-name">Karbo</span>
-                  <b className="nutrition-col-val">{coupon.nutrition?.large?.carbs || coupon.nutrition?.carbs || "0"} <small>g</small></b>
-                  <b className="nutrition-col-val">{coupon.nutrition?.small?.carbs || "0"} <small>g</small></b>
-                </div>
-                <div className="nutrition-item">
-                  <span className="nutrition-col-name">Serat</span>
-                  <b className="nutrition-col-val">{coupon.nutrition?.large?.fiber || coupon.nutrition?.fiber || "0"} <small>g</small></b>
-                  <b className="nutrition-col-val">{coupon.nutrition?.small?.fiber || "0"} <small>g</small></b>
+          {disp.showNutrition !== false && (disp.showNutritionLarge !== false || disp.showNutritionSmall !== false) && (() => {
+            const showLarge = disp.showNutritionLarge !== false;
+            const showSmall = disp.showNutritionSmall !== false;
+            const cols = showLarge && showSmall ? "1fr 1fr 1fr" : "1fr 1fr";
+            const nutritionRows = [
+              { key: "energy", label: "Energi", unitLarge: "kcal", unitSmall: "kcal",
+                vLarge: coupon.nutrition?.large?.energy || coupon.nutrition?.energy || "0",
+                vSmall: coupon.nutrition?.small?.energy || "0" },
+              { key: "protein", label: "Protein", unitLarge: "g", unitSmall: "g",
+                vLarge: coupon.nutrition?.large?.protein || coupon.nutrition?.protein || "0",
+                vSmall: coupon.nutrition?.small?.protein || "0" },
+              { key: "fat", label: "Lemak", unitLarge: "g", unitSmall: "g",
+                vLarge: coupon.nutrition?.large?.fat || coupon.nutrition?.fat || "0",
+                vSmall: coupon.nutrition?.small?.fat || "0" },
+              { key: "carbs", label: "Karbo", unitLarge: "g", unitSmall: "g",
+                vLarge: coupon.nutrition?.large?.carbs || coupon.nutrition?.carbs || "0",
+                vSmall: coupon.nutrition?.small?.carbs || "0" },
+              { key: "fiber", label: "Serat", unitLarge: "g", unitSmall: "g",
+                vLarge: coupon.nutrition?.large?.fiber || coupon.nutrition?.fiber || "0",
+                vSmall: coupon.nutrition?.small?.fiber || "0" }
+            ];
+            return (
+              <div className="coupon-right-col">
+                <span className="nutrition-header-title">NILAI GIZI</span>
+                <div className="nutrition-vertical-list" style={{ "--nut-cols": cols }}>
+                  <div className="nutrition-header-row" style={{ gridTemplateColumns: cols }}>
+                    <span className="nutrition-col-name">Gizi</span>
+                    {showLarge && <span className="nutrition-col-val title">Besar</span>}
+                    {showSmall && <span className="nutrition-col-val title">Kecil</span>}
+                  </div>
+                  {nutritionRows.map((row) => (
+                    <div key={row.key} className="nutrition-item" style={{ gridTemplateColumns: cols }}>
+                      <span className="nutrition-col-name">{row.label}</span>
+                      {showLarge && <b className="nutrition-col-val">{row.vLarge} <small>{row.unitLarge}</small></b>}
+                      {showSmall && <b className="nutrition-col-val">{row.vSmall} <small>{row.unitSmall}</small></b>}
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
 
         {disp.showCode !== false && (
