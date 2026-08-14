@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
 import { Printer, Trash2, Save, RotateCcw, Database, Ticket, Search, Upload, CheckSquare, Square, Palette, Image as ImageIcon, Clock, Plus, X, List, AlignLeft, Activity, Ruler } from "lucide-react";
 import CouponCard from "./components/CouponCard";
 import {
@@ -7,7 +8,7 @@ import {
   getGenerations,
   saveGeneration
 } from "./lib/storage";
-import { generateCoupons, formatDateID } from "./lib/coupon";
+import { generateCoupons, formatDateID, normalizeUrl } from "./lib/coupon";
 
 const DEFAULT_DISPLAY_OPTIONS = {
   showLogo: true,
@@ -22,6 +23,7 @@ const DEFAULT_DISPLAY_OPTIONS = {
   showNutritionLarge: true,
   showNutritionSmall: true,
   showCode: true,
+  showQR: true,
   showNumbering: true,
   showFooterText: true,
   showFooterLogos: true,
@@ -50,6 +52,7 @@ const EMPTY_FORM = {
   logoUrl: "",
   footerLogos: [],
   theme: "blue",
+  linkUrl: "",
   menuInputMode: "textarea",
   menuName: "1. Nasi Putih Sehat\n2. Ayam Crispy Gurih\n3. Melon Segar\n4. Susu UHT",
   menuItems: DEFAULT_MENU_ITEMS.map((item) => ({ ...item })),
@@ -229,6 +232,7 @@ export default function App() {
         showMenu: true,
         showNutrition: true,
         showCode: true,
+        showQR: true,
         showNumbering: true,
         showFooterText: true,
         showFooterLogos: true,
@@ -254,6 +258,7 @@ export default function App() {
         showMenu: false,
         showNutrition: false,
         showCode: false,
+        showQR: false,
         showNumbering: false,
         showFooterText: false,
         showFooterLogos: false,
@@ -375,6 +380,7 @@ export default function App() {
         footerLogos: (form.footerLogos || []).filter(Boolean),
         theme: form.theme || "blue",
         nutrition: normalizeNutrition(form),
+        linkUrl: normalizeUrl(form.linkUrl),
         displayOptions: { ...form.displayOptions }
       });
 
@@ -402,6 +408,7 @@ export default function App() {
         logoUrl: form.logoUrl || "",
         footerLogos: (form.footerLogos || []).filter(Boolean),
         theme: form.theme || "blue",
+        linkUrl: normalizeUrl(form.linkUrl),
         quantity,
         displayOptions: { ...form.displayOptions },
         nutrition: normalizeNutrition(form),
@@ -420,6 +427,7 @@ export default function App() {
   function resetForm() {
     setForm({
       ...EMPTY_FORM,
+      linkUrl: "",
       menuItems: DEFAULT_MENU_ITEMS.map((item) => ({ ...item })),
       displayOptions: { ...DEFAULT_DISPLAY_OPTIONS }
     });
@@ -454,9 +462,11 @@ export default function App() {
         : DEFAULT_MENU_ITEMS.map((item) => ({ ...item })),
       date: record.date || "",
       quantity: record.quantity || 10,
+      linkUrl: record.linkUrl || "",
       displayOptions: record.displayOptions ? { ...record.displayOptions } : {
         ...DEFAULT_DISPLAY_OPTIONS,
         showCode: record.showCode !== undefined ? record.showCode : true,
+        showQR: record.showQR !== undefined ? record.showQR : true,
         showNumbering: record.showNumbering !== undefined ? record.showNumbering : true
       },
       energy: record.nutrition?.large?.energy || record.nutrition?.energy || "",
@@ -589,6 +599,33 @@ export default function App() {
                   placeholder="Contoh: Rp 15.000"
                 />
               </label>
+
+              <div className="field field-full link-input-field">
+                <span><ImageIcon size={14} style={{ display: "inline", marginRight: 4 }} /> Link / URL Tujuan QR Code</span>
+                <div className="link-input-box">
+                  <input
+                    type="url"
+                    value={form.linkUrl || ""}
+                    onChange={(e) => change("linkUrl", e.target.value)}
+                    placeholder="Contoh: https://contoh.com/info-label"
+                  />
+                  {form.linkUrl && form.linkUrl.trim() && (
+                    <div className="link-qr-preview" title={normalizeUrl(form.linkUrl)}>
+                      <QRCodeSVG
+                        value={normalizeUrl(form.linkUrl)}
+                        size={44}
+                        level="M"
+                        margin={1}
+                        bgColor="#ffffff"
+                        fgColor="#0f172a"
+                      />
+                    </div>
+                  )}
+                </div>
+                <small className="link-input-hint">
+                  Link ini akan dibuatkan QR code pada label. Kosongkan untuk menggunakan kode label sebagai QR.
+                </small>
+              </div>
 
               <label className="field field-full">
                 <span>Jumlah Label</span>
@@ -951,6 +988,15 @@ export default function App() {
                   onChange={(e) => toggleDisplay("showCode", e.target.checked)}
                 />
                 <span>Tampilkan Kode Label & QR</span>
+              </label>
+
+              <label className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={form.displayOptions?.showQR !== false}
+                  onChange={(e) => toggleDisplay("showQR", e.target.checked)}
+                />
+                <span>Tampilkan QR Code</span>
               </label>
 
               <label className="checkbox-item">

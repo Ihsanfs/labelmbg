@@ -9,6 +9,14 @@ export function randomCode(length = 10) {
   return Array.from(values, (v) => chars[v % chars.length]).join("");
 }
 
+export function normalizeUrl(rawUrl) {
+  const trimmed = (rawUrl || "").trim();
+  if (!trimmed) return "";
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  if (/^[\w-]+(\.[\w-]+)+([/?#].*)?$/i.test(trimmed)) return `https://${trimmed}`;
+  return trimmed;
+}
+
 export function makeCoupon({
   index,
   code: passedCode,
@@ -24,6 +32,7 @@ export function makeCoupon({
   footerLogos,
   theme,
   nutrition,
+  linkUrl,
   displayOptions
 }) {
   const code = passedCode || randomCode(10);
@@ -43,6 +52,7 @@ export function makeCoupon({
     footerLogos: footerLogos || [],
     theme: theme || "blue",
     nutrition,
+    linkUrl: linkUrl || "",
     displayOptions: displayOptions || {
       showLogo: true,
       showLabel: true,
@@ -77,6 +87,7 @@ export function generateCoupons({
   footerLogos,
   theme,
   nutrition,
+  linkUrl,
   displayOptions
 }) {
   const batchCode = userCode || randomCode(10);
@@ -96,6 +107,7 @@ export function generateCoupons({
       footerLogos,
       theme,
       nutrition,
+      linkUrl,
       displayOptions
     })
   );

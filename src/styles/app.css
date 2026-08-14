@@ -400,6 +400,47 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .logo-preview-badge img { max-width: 28px; max-height: 28px; object-fit: contain; border-radius: 4px; background: #fff; }
 .logo-preview-badge span { font-size: 12px; font-weight: 700; color: #1e293b; }
 
+/* Link / URL input + QR preview */
+.link-input-field { gap: 8px; }
+.link-input-box { display: flex; align-items: stretch; gap: 10px; }
+.link-input-box input {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  outline: none;
+  background: #fff;
+  color: #0f172a;
+}
+.link-input-box input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
+.link-qr-preview {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  padding: 3px;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+}
+.link-qr-preview svg { display: block; width: 100%; height: 100%; }
+.link-input-hint { font-size: 12px; color: #64748b; line-height: 1.4; margin-top: 2px; }
+
+/* QR-only mode pada label (kode disembunyikan, QR menyesuaikan lebar) */
+.coupon-qr.qr-only {
+  width: 4.2em;
+  height: 4.2em;
+  align-self: center;
+}
+.qr-only-row {
+  justify-content: center;
+  align-items: center;
+  padding-top: 0.4em;
+}
+
 /* Theme Selector */
 .theme-selector-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .theme-badge {
@@ -906,6 +947,9 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   .form-grid { grid-template-columns: 1fr; }
   .nutrition-inputs { grid-template-columns: 1fr 1fr; }
   .checkbox-options-grid { grid-template-columns: 1fr; }
+  .link-input-box { flex-direction: column; }
+  .link-input-box input { width: 100%; }
+  .link-qr-preview { align-self: flex-start; }
   .topbar { padding: 10px 12px; }
   .brand h1 { font-size: 16px; }
   .brand p { display: none; }
@@ -1327,5 +1371,7 @@ button:disabled { opacity: .55; cursor: not-allowed; }
   .print-sheet[style*="--label-w"] .coupon-code-row small { font-size: 0.44em; }
   .print-sheet[style*="--label-w"] .coupon-code-row strong { font-size: 0.75em; }
   .print-sheet[style*="--label-w"] .coupon-qr { width: 2.38em; height: 2.38em; }
+  .print-sheet[style*="--label-w"] .coupon-qr.qr-only { width: 4.2em; height: 4.2em; }
+  .print-sheet[style*="--label-w"] .qr-only-row { justify-content: center; padding-top: 0.3em; }
   .print-sheet[style*="--label-w"] .coupon-footer { font-size: 0.44em; padding: 0.08em 0.32em; }
 }

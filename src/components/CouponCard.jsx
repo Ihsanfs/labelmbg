@@ -12,6 +12,7 @@ export default function CouponCard({ coupon, index }) {
     showMenu: true,
     showNutrition: true,
     showCode: coupon.showCode !== false,
+    showQR: coupon.showQR !== false,
     showNumbering: coupon.showNumbering !== false,
     showFooterText: true,
     showFooterLogos: true,
@@ -19,6 +20,13 @@ export default function CouponCard({ coupon, index }) {
     resizeEnabled: false,
     fontBase: 16
   };
+
+  const showCode = disp.showCode !== false;
+  const showQR = disp.showQR !== false;
+
+  // QR menyimpan link (jika diisi) atau kode label sebagai fallback.
+  const qrValue = (coupon.linkUrl && coupon.linkUrl.trim()) || coupon.code || "";
+  const qrClass = !showCode ? "coupon-qr qr-only" : "coupon-qr";
 
   const themeClass = `theme-${coupon.theme || "blue"}`;
   const footerLogos = coupon.footerLogos || [];
@@ -180,15 +188,32 @@ export default function CouponCard({ coupon, index }) {
           })()}
         </div>
 
-        {disp.showCode !== false && (
+        {showCode && (
           <div className="coupon-code-row">
             <div>
               <small>KODE LABEL</small>
               <strong>{coupon.code}</strong>
             </div>
-            <div className="coupon-qr" aria-label={`QR code ${coupon.code}`}>
+            {showQR && (
+              <div className={qrClass} aria-label={`QR code ${coupon.code}`}>
+                <QRCodeSVG
+                  value={qrValue}
+                  size={1}
+                  level="M"
+                  margin={0}
+                  bgColor="#ffffff"
+                  fgColor="#0f172a"
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {!showCode && showQR && (
+          <div className="coupon-code-row qr-only-row">
+            <div className={qrClass} aria-label={`QR code ${coupon.code}`}>
               <QRCodeSVG
-                value={coupon.code}
+                value={qrValue}
                 size={1}
                 level="M"
                 margin={0}
